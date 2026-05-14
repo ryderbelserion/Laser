@@ -4,9 +4,7 @@ import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
 import net.kyori.adventure.audience.Audience;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import java.lang.reflect.Method;
 
 public final class RootCommandProcessor<CS, S extends Audience> {
 
@@ -19,10 +17,6 @@ public final class RootCommandProcessor<CS, S extends Audience> {
         this.processor = new TreeCommandProcessor<>(extension, command, this.instance = command).build();
 
         this.command = command;
-    }
-
-    public void invoke(@NotNull final Method method) {
-
     }
 
     public @NonNull TreeCommandProcessor<CS, S> getTreeProcessor() {
