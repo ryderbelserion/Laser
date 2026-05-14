@@ -19,7 +19,7 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
     }
 
     @Flower
-    @Permission(permission = "laser.use")
+    @Permission(permission = "laser.access")
     public void execute(ConsoleCommandSender sender) {
         sender.sendRichMessage("<yellow>This is the /laser command!");
     }

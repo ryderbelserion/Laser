@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.api.extensions;
 
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
+import com.ryderbelserion.laser.core.enums.PermissionMode;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,8 @@ import java.util.Set;
 public abstract class SenderExtension<CS, S extends Audience> {
 
     public @NonNull abstract CommandResult validateSender(@NonNull final CS source, @NonNull final Class<?> type);
+
+    public abstract void registerPermission(@NonNull final String permission, @NonNull final PermissionMode mode);
 
     public abstract boolean isPermitted(@NonNull final S sender, @NonNull final String permission);
 

@@ -2,7 +2,7 @@ package com.ryderbelserion.laser.paper;
 
 import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
-import com.ryderbelserion.laser.core.meta.keys.MetaKey;
+import com.ryderbelserion.laser.core.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
@@ -44,7 +44,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
     @Override
     public void init() {
-        this.extension = new PaperSenderExtension();
+        this.extension = new PaperSenderExtension(this.plugin);
     }
 
     @Override

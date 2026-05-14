@@ -4,13 +4,17 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.AbstractProcessor;
 import com.ryderbelserion.laser.core.api.annotations.Tree;
+import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
-import com.ryderbelserion.laser.core.meta.CommandMeta;
-import com.ryderbelserion.laser.core.meta.keys.MetaKey;
+import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.meta.MetaKey;
+import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
 import com.ryderbelserion.laser.core.objects.types.flower.FlowerCommandProcessor;
+import com.ryderbelserion.laser.core.objects.types.leaf.LeafCommandProcessor;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProcessor<CS, S> {
 
@@ -31,6 +35,8 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
         this.builder.add(MetaKey.description, tree.desc());
         this.builder.add(MetaKey.literal, tree.value());
         this.builder.add(MetaKey.klass, klass);
+
+        Optional.ofNullable(klass.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
     }
 
     @Override
@@ -44,6 +50,8 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
             final Method[] methods = klass.getDeclaredMethods();
 
             flower(methods).ifPresent(FlowerCommandProcessor::build);
+
+            leaf(methods).forEach(LeafCommandProcessor::build);
         });
 
         return this;

@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
+import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -15,17 +16,28 @@ import java.util.List;
 
 public abstract class ArgumentProcessor<CS, S extends Audience> {
 
+    protected final CommandMeta.Builder builder;
+
     private final SenderExtension<CS, S> extension;
     private final Parameter[] parameters;
     private final Object object;
     private final Method method;
 
-    public ArgumentProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final Method method) {
+    public ArgumentProcessor(
+            @NonNull final SenderExtension<CS, S> extension,
+            @NonNull final Object object,
+            @NonNull final Method method,
+
+            final CommandMeta.Builder builder
+    ) {
         this.parameters = method.getParameters();
         this.extension = extension;
+        this.builder = builder;
         this.object = object;
         this.method = method;
     }
+
+    public abstract @NonNull CommandMeta meta();
 
     public abstract void build();
 
