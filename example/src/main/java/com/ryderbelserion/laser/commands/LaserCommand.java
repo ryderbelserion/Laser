@@ -1,5 +1,6 @@
 package com.ryderbelserion.laser.commands;
 
+import com.ryderbelserion.laser.commands.types.SubCommand;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.annotations.Flower;
 import com.ryderbelserion.laser.core.api.annotations.Tree;
@@ -15,7 +16,7 @@ import org.bukkit.entity.Player;
 public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSender> {
 
     public LaserCommand() {
-        //addCommand(new SubCommand());
+        addBranch(new SubCommand());
     }
 
     @Flower

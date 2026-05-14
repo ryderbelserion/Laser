@@ -7,31 +7,28 @@ import com.ryderbelserion.laser.core.api.annotations.Tree;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.types.Branch;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
-import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.MetaKey;
+import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
+
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProcessor<CS, S> {
-
-    private final AbstractCommand<CS, S> command;
+public class BranchCommandProcessor<CS, S extends Audience> extends AbstractProcessor<CS, S> {
 
     /**
      * Builds the initial start of the literal chain, which is usually /laser
      *
      * @param command the parent class
      */
-    public TreeCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final Object object) {
+    public BranchCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object) {
         super(extension, object, new CommandMeta.Builder());
 
-        this.command = command;
+        final Class<?> klass = object.getClass();
 
-        final Class<?> klass = this.command.getClass();
-
-        final Tree tree = klass.getAnnotation(Tree.class);
+        final Branch tree = klass.getAnnotation(Branch.class);
 
         this.literal = LiteralArgumentBuilder.literal(tree.value());
 
@@ -48,7 +45,7 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
     }
 
     @Override
-    public @NonNull final TreeCommandProcessor<CS, S> build() {
+    public @NonNull final BranchCommandProcessor<CS, S> build() {
         this.builder.get(MetaKey.klass).ifPresent(klass -> {
             final Method[] methods = klass.getDeclaredMethods();
 
@@ -56,19 +53,6 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
 
             leaf(methods).forEach(LeafCommandProcessor::build);
         });
-
-        for (final Object branch : this.command.getBranches()) {
-            final Class<?> klass = branch.getClass();
-
-            if (!klass.isAnnotationPresent(Branch.class)) continue;
-
-            final BranchCommandProcessor<CS, S> processor = new BranchCommandProcessor<>(
-                    this.extension,
-                    branch
-            );
-
-            this.literal.then(processor.build().literal());
-        }
 
         return this;
     }
