@@ -2,6 +2,7 @@ package com.ryderbelserion.laser.paper;
 
 import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
+import com.ryderbelserion.laser.core.meta.keys.MetaKey;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
@@ -33,7 +34,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
         final LifecycleEventManager<Plugin> eventManager = this.plugin.getLifecycleManager();
 
-        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> event.registrar().register(tree.literal().build(), tree.getDescription()));
+        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> event.registrar().register(tree.literal().build(), tree.meta().get(MetaKey.description).orElse("N/A")));
     }
 
     @Override

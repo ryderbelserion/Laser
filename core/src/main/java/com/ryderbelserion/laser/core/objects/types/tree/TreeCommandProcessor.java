@@ -5,6 +5,8 @@ import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.AbstractProcessor;
 import com.ryderbelserion.laser.core.api.annotations.Tree;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
+import com.ryderbelserion.laser.core.meta.CommandMeta;
+import com.ryderbelserion.laser.core.meta.keys.MetaKey;
 import com.ryderbelserion.laser.core.objects.types.flower.FlowerCommandProcessor;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
@@ -18,11 +20,17 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
      * @param command the parent class
      */
     public TreeCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final Object object) {
-        final Tree tree = command.getClass().getAnnotation(Tree.class);
+        super(extension, object, new CommandMeta.Builder());
 
-        super(extension, object, tree.desc());
+        final Class<?> klass = command.getClass();
+
+        final Tree tree = klass.getAnnotation(Tree.class);
 
         this.literal = LiteralArgumentBuilder.literal(tree.value());
+
+        this.builder.add(MetaKey.description, tree.desc());
+        this.builder.add(MetaKey.literal, tree.value());
+        this.builder.add(MetaKey.klass, klass);
     }
 
     @Override
@@ -32,10 +40,17 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
 
     @Override
     public @NonNull final TreeCommandProcessor<CS, S> build() {
-        final Method[] methods = this.object.getClass().getDeclaredMethods();
+        this.builder.get(MetaKey.klass).ifPresent(klass -> {
+            final Method[] methods = klass.getDeclaredMethods();
 
-        flower(methods).ifPresent(FlowerCommandProcessor::build);
+            flower(methods).ifPresent(FlowerCommandProcessor::build);
+        });
 
         return this;
+    }
+
+    @Override
+    public @NonNull final CommandMeta meta() {
+        return this.builder;
     }
 }

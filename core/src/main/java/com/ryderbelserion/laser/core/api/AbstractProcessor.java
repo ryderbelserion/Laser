@@ -3,6 +3,7 @@ package com.ryderbelserion.laser.core.api;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.laser.core.api.annotations.Flower;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
+import com.ryderbelserion.laser.core.meta.CommandMeta;
 import com.ryderbelserion.laser.core.objects.types.flower.FlowerCommandProcessor;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
@@ -16,13 +17,13 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
     protected LiteralArgumentBuilder<CS> literal;
 
+    protected final CommandMeta.@NonNull Builder builder;
     protected final SenderExtension<CS, S> extension;
-    protected final String description;
     protected final Object object;
 
-    public AbstractProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final String description) {
-        this.description = description;
+    public AbstractProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, final CommandMeta.@NonNull Builder builder) {
         this.extension = extension;
+        this.builder = builder;
         this.object = object;
     }
 
@@ -42,7 +43,5 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
     public abstract @NonNull AbstractProcessor<CS, S> build();
 
-    public @NonNull String getDescription() {
-        return this.description;
-    }
+    public abstract @NonNull CommandMeta meta();
 }
