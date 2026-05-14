@@ -1,0 +1,70 @@
+package com.ryderbelserion.laser.core.objects.types;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
+import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
+import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
+import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class ArgumentProcessor<CS, S extends Audience> {
+
+    private final SenderExtension<CS, S> extension;
+    private final Parameter[] parameters;
+    private final Object object;
+    private final Method method;
+
+    public ArgumentProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final Method method) {
+        this.parameters = method.getParameters();
+        this.extension = extension;
+        this.object = object;
+        this.method = method;
+    }
+
+    public abstract void build();
+
+    protected int execute(@NonNull final CommandContext<CS> context) {
+        final Class<? extends CS> sender = getSenderType();
+        final CS source = context.getSource();
+
+        final CommandResult result = this.extension.validateSender(context.getSource(), sender);
+
+        if (result instanceof CommandResult.Error(String message)) {
+            this.extension.sendMessage(this.extension.mapAudience(source), message);
+
+            return Command.SINGLE_SUCCESS;
+        }
+
+        final List<Object> arguments = new ArrayList<>();
+
+        arguments.add(this.extension.mapSender(source, sender));
+
+        return invoke(arguments);
+    }
+
+    protected int invoke(@NotNull final List<Object> arguments) {
+        if (!this.method.trySetAccessible()) return Command.SINGLE_SUCCESS;
+
+        try {
+            this.method.invoke(this.object, arguments.toArray());
+        } catch (IllegalAccessException | InvocationTargetException exception) {
+            exception.printStackTrace();
+        }
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    public @NotNull Class<? extends CS> getSenderType() {
+        if (this.parameters == null || parameters.length == 0) {
+            throw new IllegalStateException("No sender parameter has been found.");
+        }
+
+        return this.extension.getSenderType(this.parameters[0].getType());
+    }
+}

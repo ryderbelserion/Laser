@@ -1,0 +1,10 @@
+name: 'Laser'
+main: 'com.ryderbelserion.laser.Laser'
+
+version: '1.0.0'
+api-version: '26.1.2'
+description: 'The best opinionated command framework around!'
+
+authors: [ ryderbelserion ]
+
+folia-supported: true

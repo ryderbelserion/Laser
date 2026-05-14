@@ -1,0 +1,39 @@
+package com.ryderbelserion.laser.core.objects;
+
+import com.ryderbelserion.laser.core.api.AbstractCommand;
+import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
+import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
+import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import java.lang.reflect.Method;
+
+public final class RootCommandProcessor<CS, S extends Audience> {
+
+    private final TreeCommandProcessor<CS, S> processor; // process the /laser command.
+
+    private final AbstractCommand<CS, S> command; // contains information like branch commands.
+    private final Object instance; // invocation instance.
+
+    public RootCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command) {
+        this.processor = new TreeCommandProcessor<>(extension, command, this.instance = command).build();
+
+        this.command = command;
+    }
+
+    public void invoke(@NotNull final Method method) {
+
+    }
+
+    public @NonNull TreeCommandProcessor<CS, S> getTreeProcessor() {
+        return this.processor;
+    }
+
+    public @NonNull AbstractCommand<CS, S> getCommand() {
+        return this.command;
+    }
+
+    public @NonNull Object getInstance() {
+        return this.instance;
+    }
+}
