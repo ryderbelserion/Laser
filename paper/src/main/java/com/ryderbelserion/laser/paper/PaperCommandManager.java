@@ -4,7 +4,7 @@ import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
-import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
+import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;

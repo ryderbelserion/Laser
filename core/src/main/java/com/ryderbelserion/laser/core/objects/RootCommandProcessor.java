@@ -2,7 +2,7 @@ package com.ryderbelserion.laser.core.objects;
 
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
-import com.ryderbelserion.laser.core.objects.types.tree.TreeCommandProcessor;
+import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
 

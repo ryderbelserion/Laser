@@ -1,4 +1,4 @@
-package com.ryderbelserion.laser.core.objects.types;
+package com.ryderbelserion.laser.core.meta.processors;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;

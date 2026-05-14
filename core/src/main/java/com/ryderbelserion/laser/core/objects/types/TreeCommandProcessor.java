@@ -1,4 +1,4 @@
-package com.ryderbelserion.laser.core.objects.types.tree;
+package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
@@ -9,8 +9,6 @@ import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.MetaKey;
 import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
-import com.ryderbelserion.laser.core.objects.types.flower.FlowerCommandProcessor;
-import com.ryderbelserion.laser.core.objects.types.leaf.LeafCommandProcessor;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.Method;
