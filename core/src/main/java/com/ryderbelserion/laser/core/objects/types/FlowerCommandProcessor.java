@@ -15,29 +15,24 @@ import java.util.Optional;
 
 public class FlowerCommandProcessor<CS, S extends Audience> extends ArgumentProcessor<CS, S> {
 
-    private final LiteralArgumentBuilder<CS> literal;
-
     public FlowerCommandProcessor(
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object instance,
-            @NonNull final LiteralArgumentBuilder<CS> literal,
             @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
         super(extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
-        this.literal = literal;
-
         Optional.ofNullable(method.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
     }
 
     @Override
-    public void build() {
-        this.builder.get(MetaKey.permission).ifPresent(permission -> this.literal.requires(context -> {
+    public void build(@NonNull final LiteralArgumentBuilder<CS> root) {
+        this.builder.get(MetaKey.permission).ifPresent(permission -> root.requires(context -> {
             return permission.isPermitted(context);
         }));
 
-        this.literal.executes(this::execute);
+        root.executes(this::execute);
     }
 
     @Override

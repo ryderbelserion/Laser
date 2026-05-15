@@ -37,12 +37,12 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
     }
 
     @Override
-    public void build() {
+    public void build(@NonNull final LiteralArgumentBuilder<CS> root) {
         this.builder.get(MetaKey.permission).ifPresent(permission -> this.literal.requires(context -> {
             return permission.isPermitted(context);
         }));
 
-        this.literal.executes(this::execute);
+        root.then(this.literal.executes(this::execute));
     }
 
     @Override

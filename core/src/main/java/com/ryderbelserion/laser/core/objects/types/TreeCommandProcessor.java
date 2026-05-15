@@ -53,9 +53,9 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
         this.builder.get(MetaKey.klass).ifPresent(klass -> {
             final Method[] methods = klass.getDeclaredMethods();
 
-            flower(methods).ifPresent(FlowerCommandProcessor::build);
+            flower(methods).ifPresent(flower -> flower.build(this.literal));
 
-            leaf(methods).forEach(LeafCommandProcessor::build);
+            leaf(methods).forEach(leaf -> leaf.build(this.literal));
         });
 
         for (final Object branch : this.command.getBranches()) {

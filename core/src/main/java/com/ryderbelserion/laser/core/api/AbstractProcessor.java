@@ -40,7 +40,7 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
                     return !Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers);
                 })
-                .map(method -> new FlowerCommandProcessor<>(this.extension, this.object, this.literal, this.logger, method))
+                .map(method -> new FlowerCommandProcessor<>(this.extension, this.object, this.logger, method))
                 .toList().getFirst());
     }
 

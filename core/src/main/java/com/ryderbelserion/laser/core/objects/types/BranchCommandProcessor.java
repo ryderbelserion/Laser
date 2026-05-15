@@ -42,9 +42,9 @@ public class BranchCommandProcessor<CS, S extends Audience> extends AbstractProc
         this.builder.get(MetaKey.klass).ifPresent(klass -> {
             final Method[] methods = klass.getDeclaredMethods();
 
-            flower(methods).ifPresent(FlowerCommandProcessor::build);
+            flower(methods).ifPresent(flower -> flower.build(this.literal));
 
-            leaf(methods).forEach(LeafCommandProcessor::build);
+            leaf(methods).forEach(leaf -> leaf.build(this.literal));
         });
 
         return this;

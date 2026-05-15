@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.meta.processors;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -48,7 +49,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
     public abstract @NonNull CommandMeta meta();
 
-    public abstract void build();
+    public abstract void build(@NonNull final LiteralArgumentBuilder<CS> root);
 
     protected @NotNull final List<Parameter> process() {
         return Arrays.stream(this.parameters)
