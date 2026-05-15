@@ -9,6 +9,7 @@ import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
 import com.ryderbelserion.laser.core.meta.processors.ArgumentProcessor;
 import net.kyori.adventure.audience.Audience;
+import com.ryderbelserion.laser.core.api.AbstractLogger;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -16,15 +17,14 @@ import java.util.Optional;
 public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProcessor<CS, S> {
 
     private final LiteralArgumentBuilder<CS> literal;
-    private final LiteralArgumentBuilder<CS> root;
 
     public LeafCommandProcessor(
             @NonNull final SenderExtension<CS, S> extension,
-            @NonNull final LiteralArgumentBuilder<CS> root,
             @NonNull final Object instance,
+            @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
-        super(extension, instance, method, new CommandMeta.Builder());
+        super(extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
         final Leaf leaf = method.getAnnotation(Leaf.class);
 
@@ -34,8 +34,6 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
         this.builder.add(MetaKey.literal, leaf.value());
 
         Optional.ofNullable(method.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
-
-        this.root = root;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
             return permission.isPermitted(context);
         }));
 
-        this.root.then(this.literal.executes(this::execute));
+        this.literal.executes(this::execute);
     }
 
     @Override

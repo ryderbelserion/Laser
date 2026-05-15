@@ -8,6 +8,7 @@ import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
 import com.ryderbelserion.laser.core.meta.processors.ArgumentProcessor;
 import net.kyori.adventure.audience.Audience;
+import com.ryderbelserion.laser.core.api.AbstractLogger;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -20,9 +21,10 @@ public class FlowerCommandProcessor<CS, S extends Audience> extends ArgumentProc
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object instance,
             @NonNull final LiteralArgumentBuilder<CS> literal,
+            @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
-        super(extension, instance, method, new CommandMeta.Builder());
+        super(extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
         this.literal = literal;
 

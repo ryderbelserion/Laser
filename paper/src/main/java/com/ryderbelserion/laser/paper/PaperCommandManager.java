@@ -5,10 +5,12 @@ import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
+import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,10 +18,11 @@ import org.jspecify.annotations.NonNull;
 
 public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
 
+    private final PaperLoggerExtension logger;
     private final JavaPlugin plugin;
 
     public PaperCommandManager(@NonNull final JavaPlugin plugin) {
-        this.plugin = plugin;
+        this.logger = new PaperLoggerExtension(this.plugin = plugin);
 
         init();
     }
@@ -28,7 +31,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
     @Override
     public void registerTree(@NonNull final AbstractCommand<CommandSourceStack, CommandSender> command) {
-        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this.extension, command);
+        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSourceStack, CommandSender> tree = processor.getTreeProcessor();
 

@@ -11,6 +11,7 @@ import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.MetaKey;
 import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
 import net.kyori.adventure.audience.Audience;
+import com.ryderbelserion.laser.core.api.AbstractLogger;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -24,8 +25,8 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
      *
      * @param command the parent class
      */
-    public TreeCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final Object object) {
-        super(extension, object, new CommandMeta.Builder());
+    public TreeCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final AbstractLogger logger) {
+        super(extension, command.getClass(), logger, new CommandMeta.@NonNull Builder());
 
         this.command = command;
 
@@ -64,6 +65,7 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
 
             final BranchCommandProcessor<CS, S> processor = new BranchCommandProcessor<>(
                     this.extension,
+                    this.logger,
                     branch
             );
 

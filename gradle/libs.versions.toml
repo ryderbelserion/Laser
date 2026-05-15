@@ -33,6 +33,7 @@ kyori-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.
 kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
 kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
 [bundles]
 adventure = [
     "kyori-legacy",

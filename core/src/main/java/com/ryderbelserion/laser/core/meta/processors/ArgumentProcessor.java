@@ -2,24 +2,30 @@ package com.ryderbelserion.laser.core.meta.processors;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
+import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
 import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.meta.types.ArgumentMeta;
 import net.kyori.adventure.audience.Audience;
+import com.ryderbelserion.laser.core.api.AbstractLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class ArgumentProcessor<CS, S extends Audience> {
 
-    protected final CommandMeta.Builder builder;
+    protected final CommandMeta.@NonNull Builder builder;
+    protected final ArgumentMeta<CS> argumentMeta;
+    protected final Parameter[] parameters;
 
     private final SenderExtension<CS, S> extension;
-    private final Parameter[] parameters;
+    protected final AbstractLogger logger;
     private final Object object;
     private final Method method;
 
@@ -27,12 +33,15 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object object,
             @NonNull final Method method,
+            @NonNull final AbstractLogger logger,
 
-            final CommandMeta.Builder builder
+            final CommandMeta.@NonNull Builder builder
     ) {
         this.parameters = method.getParameters();
+        this.argumentMeta = new ArgumentMeta<>();
         this.extension = extension;
         this.builder = builder;
+        this.logger = logger;
         this.object = object;
         this.method = method;
     }
@@ -40,6 +49,12 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
     public abstract @NonNull CommandMeta meta();
 
     public abstract void build();
+
+    protected @NotNull final List<Parameter> process() {
+        return Arrays.stream(this.parameters)
+                .filter(insect -> insect.isAnnotationPresent(Suggestion.class))
+                .toList();
+    }
 
     protected int execute(@NonNull final CommandContext<CS> context) {
         final Class<? extends CS> sender = getSenderType();

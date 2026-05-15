@@ -22,11 +22,13 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
     protected final CommandMeta.@NonNull Builder builder;
     protected final SenderExtension<CS, S> extension;
+    protected final AbstractLogger logger;
     protected final Object object;
 
-    public AbstractProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, final CommandMeta.@NonNull Builder builder) {
+    public AbstractProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final AbstractLogger logger, final CommandMeta.@NonNull Builder builder) {
         this.extension = extension;
         this.builder = builder;
+        this.logger = logger;
         this.object = object;
     }
 
@@ -38,7 +40,7 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
                     return !Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers);
                 })
-                .map(method -> new FlowerCommandProcessor<>(this.extension, this.object, this.literal, method))
+                .map(method -> new FlowerCommandProcessor<>(this.extension, this.object, this.literal, this.logger, method))
                 .toList().getFirst());
     }
 
@@ -50,7 +52,7 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
                     return !Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers);
                 })
-                .map(method -> new LeafCommandProcessor<>(this.extension, this.literal, this.object, method))
+                .map(method -> new LeafCommandProcessor<>(this.extension, this.object, this.logger, method))
                 .toList();
     }
 
