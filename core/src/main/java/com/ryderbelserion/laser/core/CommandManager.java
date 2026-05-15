@@ -14,4 +14,5 @@ public abstract class CommandManager<CS, S extends Audience> {
     public abstract void post(@NonNull final String command);
 
     public abstract void init();
+
 }

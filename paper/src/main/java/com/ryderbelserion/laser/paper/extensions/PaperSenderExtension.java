@@ -2,6 +2,8 @@ package com.ryderbelserion.laser.paper.extensions;
 
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
+import com.ryderbelserion.laser.core.api.message.MessageKey;
+import com.ryderbelserion.laser.core.api.message.MessageRegistry;
 import com.ryderbelserion.laser.core.enums.PermissionMode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
@@ -22,7 +24,15 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     private final JavaPlugin plugin;
 
     public PaperSenderExtension(@NonNull final JavaPlugin plugin) {
+        super(new MessageRegistry<>());
+
         this.plugin = plugin;
+    }
+
+    @Override
+    public void init() {
+        this.registry.register(MessageKey.console_only, (sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only console players can execute this command!"));
+        this.registry.register(MessageKey.player_only, ((sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only players can execute this command!")));
     }
 
     @Override
@@ -34,11 +44,11 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
         final CommandSender sender = source.getSender();
 
         if (Player.class.isAssignableFrom(type) && (!(sender instanceof Player))) {
-            return error("You must be a player to run this command!");
+            return error(MessageKey.player_only);
         }
 
         if (ConsoleCommandSender.class.isAssignableFrom(type) && !(sender instanceof ConsoleCommandSender)) {
-            return error("You must be executing this command from console!");
+            return error(MessageKey.console_only);
         }
 
         return safe();

@@ -48,6 +48,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     @Override
     public void init() {
         this.extension = new PaperSenderExtension(this.plugin);
+        this.extension.init();
     }
 
     @Override

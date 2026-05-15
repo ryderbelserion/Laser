@@ -6,6 +6,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
+import com.ryderbelserion.laser.core.api.message.MessageKey;
+import com.ryderbelserion.laser.core.api.message.context.MessageContext;
 import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.meta.types.ArgumentMeta;
 import net.kyori.adventure.audience.Audience;
@@ -63,8 +65,8 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
         final CommandResult result = this.extension.validateSender(context.getSource(), sender);
 
-        if (result instanceof CommandResult.Error(String message)) {
-            this.extension.sendMessage(this.extension.mapAudience(source), message);
+        if (result instanceof CommandResult.Error(MessageKey<MessageContext> message)) {
+            this.extension.getRegistry().sendMessage(this.extension.mapAudience(source), message, new MessageContext(this.meta()));
 
             return Command.SINGLE_SUCCESS;
         }
