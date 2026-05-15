@@ -26,7 +26,7 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
      * @param command the parent class
      */
     public TreeCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final AbstractLogger logger) {
-        super(extension, command.getClass(), logger, new CommandMeta.@NonNull Builder());
+        super(extension, command, logger, new CommandMeta.@NonNull Builder());
 
         this.command = command;
 
