@@ -26,9 +26,9 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
     protected final CommandMeta.@NonNull Builder builder;
     protected final ArgumentMeta<CS> argumentMeta;
     protected final Parameter[] parameters;
+    protected final AbstractLogger logger;
 
     private final SenderExtension<CS, S> extension;
-    protected final AbstractLogger logger;
     private final Object object;
     private final Method method;
 

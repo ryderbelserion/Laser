@@ -1,15 +1,15 @@
 [versions]
-paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
-adventure = "5.0.0" # https://github.com/KyoriPowered/adventure
-paper = "26.1.2.build.+" # https://github.com/PaperMC/Paper
+paperweight = "2.0.0-beta.24" # https://github.com/PaperMC/paperweight
+adventure = "5.1.0" # https://github.com/KyoriPowered/adventure
+paper = "26.3.build.+" # https://github.com/PaperMC/Paper
 
 ## Minecraft
-minecraft = "26.1.2" # https://minecraft.net
+minecraft = "26.3" # https://minecraft.net
 brigadier = "1.3.10" # https://minecraft.net
 
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "3.0.2" # https://github.com/jpenilla/run-task
-shadow = "9.4.1" # https://github.com/GradleUp/shadow
+run-paper = "3.1.0" # https://github.com/jpenilla/run-task
+shadow = "9.6.1" # https://github.com/GradleUp/shadow
 
 url = "https://repo.crazycrew.us/releases"
 

@@ -13,4 +13,6 @@ public @interface Tree {
 
     String desc() default "";
 
+    String[] aliases() default {};
+
 }

@@ -8,6 +8,7 @@ public class MetaKey<T> {
     public static final MetaKey<PermissionMeta> permission = MetaKey.of(PermissionMeta.class, "command.permision");
     public static final MetaKey<String> description = MetaKey.of(String.class, "command.description");
     public static final MetaKey<String> literal = MetaKey.of(String.class, "command.literal");
+    public static final MetaKey<String[]> aliases = MetaKey.of(String[].class, "command.aliases");
     public static final MetaKey<Class<?>> klass = MetaKey.of(Class.class, "command.class");
 
     private final Class<? super T> type;

@@ -3,6 +3,7 @@ package com.ryderbelserion.laser.paper;
 import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.meta.MetaKey;
+import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;
@@ -10,11 +11,11 @@ import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
+import java.util.Arrays;
 
 public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
 
@@ -37,7 +38,13 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
         final LifecycleEventManager<Plugin> eventManager = this.plugin.getLifecycleManager();
 
-        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> event.registrar().register(tree.literal().build(), tree.meta().get(MetaKey.description).orElse("N/A")));
+        final CommandMeta meta = tree.meta();
+
+        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> event.registrar().register(
+                tree.literal().build(),
+                meta.get(MetaKey.description).orElse("N/A"),
+                Arrays.asList(meta.get(MetaKey.aliases).orElse(new String[0]))
+        ));
     }
 
     @Override

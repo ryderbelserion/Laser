@@ -33,11 +33,13 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
         final Class<?> klass = this.command.getClass();
 
         final Tree tree = klass.getAnnotation(Tree.class);
+        final String value = tree.value();
 
-        this.literal = LiteralArgumentBuilder.literal(tree.value());
+        this.literal = LiteralArgumentBuilder.literal(value);
 
         this.builder.add(MetaKey.description, tree.desc());
-        this.builder.add(MetaKey.literal, tree.value());
+        this.builder.add(MetaKey.aliases, tree.aliases());
+        this.builder.add(MetaKey.literal, value);
         this.builder.add(MetaKey.klass, klass);
 
         Optional.ofNullable(klass.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
