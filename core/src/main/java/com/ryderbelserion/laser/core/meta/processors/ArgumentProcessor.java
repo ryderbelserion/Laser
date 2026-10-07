@@ -23,8 +23,8 @@ import java.util.List;
 
 public abstract class ArgumentProcessor<CS, S extends Audience> {
 
+    protected final List<ArgumentMeta<CS>> arguments = new ArrayList<>();
     protected final CommandMeta.@NonNull Builder builder;
-    protected final ArgumentMeta<CS> argumentMeta;
     protected final Parameter[] parameters;
     protected final AbstractLogger logger;
 
@@ -41,20 +41,27 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
             final CommandMeta.@NonNull Builder builder
     ) {
         this.parameters = method.getParameters();
-        this.argumentMeta = new ArgumentMeta<>();
         this.extension = extension;
         this.builder = builder;
         this.logger = logger;
         this.object = object;
         this.method = method;
+
+        init();
+    }
+
+    public void init() {
+        for (final Parameter parameter : process(this.parameters)) {
+            this.arguments.add(new ArgumentMeta<>(parameter));
+        }
     }
 
     public abstract @NonNull CommandMeta meta();
 
     public abstract void build(@NonNull final LiteralArgumentBuilder<CS> root);
 
-    protected @NotNull final List<Parameter> process() {
-        return Arrays.stream(this.parameters)
+    protected @NotNull final List<Parameter> process(final Parameter[] parameters) {
+        return Arrays.stream(parameters)
                 .filter(insect -> insect.isAnnotationPresent(Suggestion.class))
                 .toList();
     }
@@ -71,7 +78,12 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
             return Command.SINGLE_SUCCESS;
         }
 
-        final List<Object> arguments = new ArrayList<>();
+        final int size = this.arguments.size();
+        final List<Object> arguments = new ArrayList<>(size);
+
+        for (int index = 0; index < size; index++) {
+            final ArgumentMeta<CS> argument = this.arguments.get(index);
+        }
 
         arguments.add(this.extension.mapSender(source, sender));
 

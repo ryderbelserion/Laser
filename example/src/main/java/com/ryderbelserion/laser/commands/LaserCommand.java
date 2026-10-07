@@ -5,13 +5,14 @@ import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.annotations.Flower;
 import com.ryderbelserion.laser.core.api.annotations.Tree;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
+import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-@Tree(value = "laser", desc = "The base command for Laser!", aliases = {"le", "lev"})
+@Tree(value = "laser", desc = "The base command for Laser!", aliases = {"le"})
 @Permission(permission = "laser.use")
 public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSender> {
 
@@ -28,12 +29,12 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
     @Leaf(value = "give", desc = "The give command")
     @Permission(permission = "laser.give")
     public void give(
-            Player player
-            //@Suggestion(name = "amount", type = int.class) int amount,
+            Player player,
+            @Suggestion(name = "amount", type = int.class) int amount
             //@Suggestion(name = "item", type = int.class) int item
             //@Suggestion(name = "bank", type = int.class) int bank
     ) {
-        player.sendRichMessage("<red>This is the /laser give command.");
+        player.sendRichMessage("<red>This is the /laser give command with amount %s".formatted(amount));
 
         //if (amount > 0) {
         //    player.sendRichMessage("<red>Amount: %s".formatted(amount));
