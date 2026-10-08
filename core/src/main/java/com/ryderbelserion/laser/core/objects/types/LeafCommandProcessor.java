@@ -42,6 +42,22 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
             return permission.isPermitted(context);
         }));
 
+        if (!this.arguments.isEmpty()) {
+            final int size = this.arguments.size();
+
+            for (int index = 0; index < size; index++) {
+                final int amount = index+1;
+
+                if (amount < size) {
+                    this.arguments.get(index).then(this.arguments.get(amount).getArgument());
+                }
+            }
+
+            root.then(this.literal.then(this.arguments.getFirst().getArgument().executes(this::execute)));
+
+            return;
+        }
+
         root.then(this.literal.executes(this::execute));
     }
 

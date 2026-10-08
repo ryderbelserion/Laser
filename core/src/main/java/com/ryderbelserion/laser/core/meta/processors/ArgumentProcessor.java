@@ -78,14 +78,11 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
             return Command.SINGLE_SUCCESS;
         }
 
-        final int size = this.arguments.size();
-        final List<Object> arguments = new ArrayList<>(size);
-
-        for (int index = 0; index < size; index++) {
-            final ArgumentMeta<CS> argument = this.arguments.get(index);
-        }
+        final List<Object> arguments = new ArrayList<>();
 
         arguments.add(this.extension.mapSender(source, sender));
+
+        this.arguments.forEach(argument -> arguments.add(context.getArgument(argument.getArgumentName(), argument.mapPrimitive(argument.getArgumentType()))));
 
         return invoke(arguments);
     }
