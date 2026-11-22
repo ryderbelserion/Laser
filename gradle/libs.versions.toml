@@ -1,6 +1,6 @@
 [versions]
 paperweight = "2.0.0-beta.24" # https://github.com/PaperMC/paperweight
-adventure = "5.1.0" # https://github.com/KyoriPowered/adventure
+adventure = "5.2.0" # https://github.com/KyoriPowered/adventure
 paper = "26.3.build.+" # https://github.com/PaperMC/Paper
 
 ## Minecraft

@@ -31,11 +31,11 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
     public void give(
             Player player,
             @Suggestion(name = "amount", type = int.class) int amount,
-            @Suggestion(name = "item", type = int.class) int other
+            @Suggestion(name = "item", type = int.class) int item
             //@Suggestion(name = "bank", type = int.class) int bank
     ) {
         player.sendRichMessage("<red>This is the /laser give command with amount %s".formatted(amount));
-        player.sendRichMessage("<red>String %s".formatted(other));
+        player.sendRichMessage("<red>String %s".formatted(item));
 
         //if (amount > 0) {
         //    player.sendRichMessage("<red>Amount: %s".formatted(amount));

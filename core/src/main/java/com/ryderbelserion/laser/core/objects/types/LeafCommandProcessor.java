@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -43,17 +44,15 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
         }));
 
         if (!this.arguments.isEmpty()) {
-            final int size = this.arguments.size();
+            RequiredArgumentBuilder<CS, ?> child = null;
 
-            for (int index = 0; index < size; index++) {
-                final int amount = index+1;
+            for (int index = this.arguments.size() - 1; index >= 0; index--) {
+                final RequiredArgumentBuilder<CS, ?> node = this.arguments.get(index).getArgument();
 
-                if (amount < size) {
-                    this.arguments.get(index).then(this.arguments.get(amount).getArgument());
-                }
+                child = child == null ? node.executes(this::execute) : node.then(child);
             }
 
-            root.then(this.literal.then(this.arguments.getFirst().getArgument().executes(this::execute)));
+            root.then(this.literal.then(child));
 
             return;
         }

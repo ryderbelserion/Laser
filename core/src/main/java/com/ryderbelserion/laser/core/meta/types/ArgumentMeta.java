@@ -60,7 +60,7 @@ public class ArgumentMeta<CS> {
         } else if (klass == long.class || klass == Long.class) {
             argumentType = LongArgumentType.longArg();
         } else if (klass == String.class) {
-            argumentType = isGreedy ? StringArgumentType.greedyString() : StringArgumentType.string();
+            argumentType = this.isGreedy ? StringArgumentType.greedyString() : StringArgumentType.string();
         }
 
         return argumentType;
