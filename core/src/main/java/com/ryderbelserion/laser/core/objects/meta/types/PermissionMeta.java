@@ -1,4 +1,4 @@
-package com.ryderbelserion.laser.core.meta.types;
+package com.ryderbelserion.laser.core.objects.meta.types;
 
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;

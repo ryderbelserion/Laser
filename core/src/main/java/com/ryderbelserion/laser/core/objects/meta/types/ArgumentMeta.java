@@ -1,4 +1,4 @@
-package com.ryderbelserion.laser.core.meta.types;
+package com.ryderbelserion.laser.core.objects.meta.types;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;

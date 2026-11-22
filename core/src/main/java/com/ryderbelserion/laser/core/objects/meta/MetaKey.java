@@ -1,6 +1,6 @@
-package com.ryderbelserion.laser.core.meta;
+package com.ryderbelserion.laser.core.objects.meta;
 
-import com.ryderbelserion.laser.core.meta.types.PermissionMeta;
+import com.ryderbelserion.laser.core.objects.meta.types.PermissionMeta;
 import org.jspecify.annotations.NonNull;
 
 public class MetaKey<T> {

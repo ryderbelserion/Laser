@@ -1,6 +1,6 @@
-package com.ryderbelserion.laser.core.meta.interfaces;
+package com.ryderbelserion.laser.core.objects.meta.interfaces;
 
-import com.ryderbelserion.laser.core.meta.MetaKey;
+import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;

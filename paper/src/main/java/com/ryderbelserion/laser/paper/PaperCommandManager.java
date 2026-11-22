@@ -2,8 +2,8 @@ package com.ryderbelserion.laser.paper;
 
 import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
-import com.ryderbelserion.laser.core.meta.MetaKey;
-import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.objects.meta.MetaKey;
+import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;

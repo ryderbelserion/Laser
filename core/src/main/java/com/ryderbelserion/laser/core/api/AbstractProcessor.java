@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.laser.core.api.annotations.Flower;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
-import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.types.FlowerCommandProcessor;
 import com.ryderbelserion.laser.core.objects.types.LeafCommandProcessor;
 import net.kyori.adventure.audience.Audience;

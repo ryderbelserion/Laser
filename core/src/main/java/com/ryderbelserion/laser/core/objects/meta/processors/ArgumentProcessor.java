@@ -1,4 +1,4 @@
-package com.ryderbelserion.laser.core.meta.processors;
+package com.ryderbelserion.laser.core.objects.meta.processors;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -8,8 +8,8 @@ import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
 import com.ryderbelserion.laser.core.api.message.MessageKey;
 import com.ryderbelserion.laser.core.api.message.context.MessageContext;
-import com.ryderbelserion.laser.core.meta.interfaces.CommandMeta;
-import com.ryderbelserion.laser.core.meta.types.ArgumentMeta;
+import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.objects.meta.types.ArgumentMeta;
 import net.kyori.adventure.audience.Audience;
 import com.ryderbelserion.laser.core.api.AbstractLogger;
 import org.jetbrains.annotations.NotNull;
