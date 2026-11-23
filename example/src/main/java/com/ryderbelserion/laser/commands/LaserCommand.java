@@ -50,4 +50,12 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
         //    player.sendRichMessage("<yellow>%s is greater than 0!".formatted(bank));
         //}
     }
+
+    @Leaf(value = "inventory", desc = "Opens a player's inventory.")
+    public void test(
+            Player player,
+            @Suggestion(name = "player", type = Player.class) Player target
+    ) {
+        player.openInventory(target.getInventory());
+    }
 }

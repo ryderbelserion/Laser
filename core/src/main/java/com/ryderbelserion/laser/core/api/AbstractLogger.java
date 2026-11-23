@@ -3,7 +3,6 @@ package com.ryderbelserion.laser.core.api;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public abstract class AbstractLogger {
@@ -33,16 +32,16 @@ public abstract class AbstractLogger {
     }
 
     public abstract void log(
-            @NotNull final Level level,
-            @NotNull final String message,
-            @NotNull final Exception exception,
-            @NotNull final Object... args
+            @NonNull final Level level,
+            @NonNull final String message,
+            @NonNull final Exception exception,
+            @NonNull final Object... args
     );
 
     public abstract void log(
-            @NotNull final Level level,
-            @NotNull final String message,
-            @NotNull final Object... args
+            @NonNull final Level level,
+            @NonNull final String message,
+            @NonNull final Object... args
     );
 
     public @NonNull final Component asComponent(@NonNull final String message, @NonNull final Object... args) {

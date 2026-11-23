@@ -1,7 +1,8 @@
 package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.ryderbelserion.laser.core.SuggestionManager;
+import com.ryderbelserion.laser.core.CommandManager;
+import com.ryderbelserion.laser.core.ResolverManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.AbstractProcessor;
 import com.ryderbelserion.laser.core.api.annotations.Tree;
@@ -26,8 +27,14 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
      *
      * @param command the parent class
      */
-    public TreeCommandProcessor(@NonNull final SuggestionManager suggestionManager, @NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractCommand<CS, S> command, @NonNull final AbstractLogger logger) {
-        super(suggestionManager, extension, command, logger, new CommandMeta.@NonNull Builder());
+    public TreeCommandProcessor(
+            @NonNull final CommandManager<CS, S> commandManager,
+                                @NonNull final ResolverManager<CS> resolverManager,
+                                @NonNull final SenderExtension<CS, S> extension,
+                                @NonNull final AbstractCommand<CS, S> command,
+                                @NonNull final AbstractLogger logger
+    ) {
+        super(commandManager, resolverManager, extension, command, logger, new CommandMeta.@NonNull Builder());
 
         this.command = command;
 
@@ -67,7 +74,8 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
             if (!klass.isAnnotationPresent(Branch.class)) continue;
 
             final BranchCommandProcessor<CS, S> processor = new BranchCommandProcessor<>(
-                    this.suggestionManager,
+                    this.commandManager,
+                    this.resolverManager,
                     this.extension,
                     this.logger,
                     branch

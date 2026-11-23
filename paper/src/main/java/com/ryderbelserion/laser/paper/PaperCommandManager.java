@@ -1,33 +1,44 @@
 package com.ryderbelserion.laser.paper;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.ryderbelserion.laser.core.CommandManager;
-import com.ryderbelserion.laser.core.SuggestionManager;
+import com.ryderbelserion.laser.core.ResolverManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
+import com.ryderbelserion.laser.core.objects.arguments.ArgumentResolver;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
+import com.ryderbelserion.laser.core.objects.meta.types.ArgumentMeta;
+import com.ryderbelserion.laser.core.objects.suggestions.SuggestionKey;
+import com.ryderbelserion.laser.core.objects.suggestions.interfaces.SuggestionSupplier;
 import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import java.util.Arrays;
+import java.util.Optional;
 
+@NullMarked
 public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
 
-    private final SuggestionManager suggestionManager;
     private final PaperLoggerExtension logger;
     private final JavaPlugin plugin;
 
-    public PaperCommandManager(@NonNull final JavaPlugin plugin) {
+    public PaperCommandManager(final JavaPlugin plugin) {
         this.logger = new PaperLoggerExtension(this.plugin = plugin);
-
-        this.suggestionManager = new SuggestionManager();
 
         init();
     }
@@ -35,8 +46,8 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     private PaperSenderExtension extension;
 
     @Override
-    public void registerTree(@NonNull final AbstractCommand<CommandSourceStack, CommandSender> command) {
-        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this.suggestionManager, this.extension, this.logger, command);
+    public void registerTree(final AbstractCommand<CommandSourceStack, CommandSender> command) {
+        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this, this.resolverManager, this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSourceStack, CommandSender> tree = processor.getTreeProcessor();
 
@@ -52,12 +63,46 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     }
 
     @Override
-    public @NonNull SuggestionManager getSuggestionManager() {
-        return this.suggestionManager;
+    public void registerSuggestion(final SuggestionKey key, final SuggestionSupplier<CommandSourceStack> supplier) {
+        this.resolverManager.register(key, supplier);
     }
 
     @Override
-    public void post(@NonNull final String command) {
+    public ArgumentType<?> mapArgumentType(final ArgumentMeta<CommandSourceStack, CommandSender> meta) {
+        final Class<?> klass = meta.getParsedType();
+
+        ArgumentType<?> argumentType = StringArgumentType.string();
+
+        if (klass == int.class || klass == Integer.class) {
+            argumentType = IntegerArgumentType.integer();
+        } else if (klass == double.class || klass == Double.class) {
+            argumentType = DoubleArgumentType.doubleArg();
+        } else if (klass == boolean.class || klass == Boolean.class) {
+            argumentType = BoolArgumentType.bool();
+        } else if (klass == long.class || klass == Long.class) {
+            argumentType = LongArgumentType.longArg();
+        } else if (klass == String.class) {
+            argumentType = meta.isGreedy() ? StringArgumentType.greedyString() : StringArgumentType.string();
+        } else if (klass == Player.class) {
+            argumentType = ArgumentTypes.player();
+        }
+
+        /*else {
+            final Optional<ArgumentResolver<CommandSourceStack, ?>> variable = this.resolverManager.get(klass);
+
+            argumentType = variable.isEmpty() ? mapArgumentType(meta) : variable.get().parser();
+        }*/
+
+        return argumentType;
+    }
+
+    @Override
+    public ResolverManager<CommandSourceStack> getSuggestionManager() {
+        return this.resolverManager;
+    }
+
+    @Override
+    public void post(final String command) {
 
     }
 
@@ -68,7 +113,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     }
 
     @Override
-    public @NonNull PaperSenderExtension getExtension() {
+    public PaperSenderExtension getExtension() {
         return this.extension;
     }
 }

@@ -7,7 +7,6 @@ import com.ryderbelserion.laser.core.api.message.context.MessageContext;
 import com.ryderbelserion.laser.core.enums.PermissionMode;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import java.util.Set;
 
@@ -29,7 +28,7 @@ public abstract class SenderExtension<CS, S extends Audience> {
 
     public @NonNull abstract S mapAudience(@NonNull final CS source);
 
-    public @NonNull abstract Class<? extends CS> getSenderType(@NotNull final Class<?> type);
+    public @NonNull abstract Class<? extends CS> getSenderType(@NonNull final Class<?> type);
 
     public @NonNull abstract Set<Class<?>> getValidSenders();
 

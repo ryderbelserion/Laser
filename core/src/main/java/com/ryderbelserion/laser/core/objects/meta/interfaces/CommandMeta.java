@@ -2,7 +2,6 @@ package com.ryderbelserion.laser.core.objects.meta.interfaces;
 
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import java.util.Optional;
 
 public interface CommandMeta {
     
-    <T> @NotNull Optional<T> get(@NonNull final MetaKey<T> metaKey);
+    <T> @NonNull Optional<T> get(@NonNull final MetaKey<T> metaKey);
     
     <T> @Nullable T getNullable(@NonNull final MetaKey<T> metaKey);
     

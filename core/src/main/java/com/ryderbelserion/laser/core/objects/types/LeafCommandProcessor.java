@@ -2,7 +2,8 @@ package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.ryderbelserion.laser.core.SuggestionManager;
+import com.ryderbelserion.laser.core.CommandManager;
+import com.ryderbelserion.laser.core.ResolverManager;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -22,13 +23,14 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
     private final LiteralArgumentBuilder<CS> literal;
 
     public LeafCommandProcessor(
-            @NonNull final SuggestionManager suggestionManager,
+            @NonNull final CommandManager<CS, S> commandManager,
+            @NonNull final ResolverManager<CS> resolverManager,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object instance,
             @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
-        super(suggestionManager, extension, instance, method, logger, new CommandMeta.@NonNull Builder());
+        super(commandManager, resolverManager, extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
         final Leaf leaf = method.getAnnotation(Leaf.class);
 
@@ -50,12 +52,10 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
             RequiredArgumentBuilder<CS, ?> child = null;
 
             for (int index = this.arguments.size() - 1; index >= 0; index--) {
-                final ArgumentMeta<CS> meta = this.arguments.get(index);
+                final ArgumentMeta<CS, S> meta = this.arguments.get(index);
 
                 if (child == null) {
-                    final RequiredArgumentBuilder<CS, ?> arg = meta.getArgument();
-
-                    arg.executes(this::execute);
+                    meta.getArgument().executes(this::execute);
                 } else {
                     meta.then(child);
                 }

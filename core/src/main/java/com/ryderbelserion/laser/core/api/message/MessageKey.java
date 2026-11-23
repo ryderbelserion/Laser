@@ -1,7 +1,6 @@
 package com.ryderbelserion.laser.core.api.message;
 
 import com.ryderbelserion.laser.core.api.message.context.MessageContext;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public class MessageKey<C extends MessageContext> {
@@ -26,7 +25,7 @@ public class MessageKey<C extends MessageContext> {
         return this.key;
     }
 
-    public static <C extends MessageContext> @NotNull MessageKey<C> of(@NonNull final String key, @NonNull final Class<C> type) {
+    public static <C extends MessageContext> @NonNull MessageKey<C> of(@NonNull final String key, @NonNull final Class<C> type) {
         return new MessageKey<>(key, type);
     }
 }

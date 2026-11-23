@@ -13,7 +13,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
 
     @Override
     public void init() {
-        this.registry.register(MessageKey.console_only, (sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only console players can execute this command!"));
+        this.registry.register(MessageKey.console_only, (sender, context) -> sender.sendRichMessage("<yellow>[Laser] <red>Only console players can execute this command!"));
         this.registry.register(MessageKey.player_only, (sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only players can execute this command!"));
     }
 
@@ -101,7 +100,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public @NonNull Class<? extends CommandSourceStack> getSenderType(@NotNull final Class<?> klass) {
+    public @NonNull Class<? extends CommandSourceStack> getSenderType(@NonNull final Class<?> klass) {
         if (!this.getValidSenders().contains(klass)) {
             throw new IllegalStateException("%s is not a valid sender.".formatted(klass.getSimpleName()));
         }
