@@ -7,6 +7,7 @@ import com.ryderbelserion.laser.core.api.annotations.Tree;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
+import com.ryderbelserion.laser.core.enums.PermissionMode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -27,7 +28,7 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
     }
 
     @Leaf(value = "give", desc = "The give command")
-    @Permission(permission = "laser.give")
+    @Permission(permission = {"laser.give", "laser.use"}, mode = PermissionMode.ANY_OF)
     public void give(
             Player player,
             @Suggestion(name = "amount", type = int.class) int amount,

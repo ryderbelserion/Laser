@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 @Branch(value = "sub")
-@Permission(permission = "fusion.sub")
+@Permission(permission = "laser.sub")
 public class SubCommand {
 
     @Flower
@@ -17,13 +17,13 @@ public class SubCommand {
     }
 
     @Leaf(value = "help", desc = "The help command")
-    @Permission(permission = "fusion.help")
+    @Permission(permission = {"laser.help", "laser.test"})
     public void help(ConsoleCommandSender sender) {
         sender.sendRichMessage("<green>This is the help command.");
     }
 
     @Leaf(value = "balance", desc = "The balance command")
-    @Permission(permission = "fusion.balance")
+    @Permission(permission = "laser.balance")
     public void balance(ConsoleCommandSender sender) {
         sender.sendRichMessage("<green>This is the balance command.");
     }

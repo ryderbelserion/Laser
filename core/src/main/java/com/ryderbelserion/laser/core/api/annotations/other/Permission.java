@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Permission {
 
-    PermissionMode mode() default PermissionMode.OP;
+    PermissionMode mode() default PermissionMode.ALL_OF;
 
-    String permission() default "";
+    String[] permission() default "";
 
     String description() default "";
 

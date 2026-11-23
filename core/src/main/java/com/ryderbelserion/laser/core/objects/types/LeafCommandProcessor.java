@@ -7,6 +7,7 @@ import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
+import com.ryderbelserion.laser.core.objects.meta.types.ArgumentMeta;
 import com.ryderbelserion.laser.core.objects.meta.types.PermissionMeta;
 import com.ryderbelserion.laser.core.objects.meta.processors.ArgumentProcessor;
 import net.kyori.adventure.audience.Audience;
@@ -47,9 +48,15 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
             RequiredArgumentBuilder<CS, ?> child = null;
 
             for (int index = this.arguments.size() - 1; index >= 0; index--) {
-                final RequiredArgumentBuilder<CS, ?> node = this.arguments.get(index).getArgument();
+                final ArgumentMeta<CS> meta = this.arguments.get(index);
 
-                child = child == null ? node.executes(this::execute) : node.then(child);
+                if (child == null) {
+                    meta.getArgument().executes(this::execute);
+                } else {
+                    meta.then(child);
+                }
+
+                child = meta.getArgument();
             }
 
             root.then(this.literal.then(child));
