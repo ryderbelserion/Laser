@@ -1,3 +1,5 @@
+import java.time.Year
+
 plugins {
     id("com.jeff-media.fix-javadoc-plugin")
 
@@ -18,7 +20,7 @@ tasks {
         options.isDocFilesSubDirs = true
         options.windowTitle("$name ${project.version} API Documentation")
         options.docTitle("<h1>$name ${project.version} API</h1>")
-        options.bottom("Copyright © 2025 Ryder Belserion")
+        options.bottom("Copyright © ${Year.now().value} Ryder Belserion")
         options.linkSource(true)
         options.addBooleanOption("html5", true)
     }
