@@ -9,7 +9,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.ryderbelserion.laser.core.CommandManager;
 import com.ryderbelserion.laser.core.ResolverManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
-import com.ryderbelserion.laser.core.objects.arguments.ArgumentResolver;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
@@ -20,16 +19,13 @@ import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;
 import com.ryderbelserion.laser.paper.extensions.PaperSenderExtension;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
 import java.util.Arrays;
-import java.util.Optional;
 
 @NullMarked
 public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
@@ -83,15 +79,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
             argumentType = LongArgumentType.longArg();
         } else if (klass == String.class) {
             argumentType = meta.isGreedy() ? StringArgumentType.greedyString() : StringArgumentType.string();
-        } else if (klass == Player.class) {
-            argumentType = ArgumentTypes.player();
         }
-
-        /*else {
-            final Optional<ArgumentResolver<CommandSourceStack, ?>> variable = this.resolverManager.get(klass);
-
-            argumentType = variable.isEmpty() ? mapArgumentType(meta) : variable.get().parser();
-        }*/
 
         return argumentType;
     }

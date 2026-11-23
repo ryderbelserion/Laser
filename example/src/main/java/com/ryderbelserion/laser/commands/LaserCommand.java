@@ -33,22 +33,14 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
             Player player,
             @Suggestion(name = "amount", type = int.class) int amount,
             @Suggestion(name = "item", type = int.class) int item
-            //@Suggestion(name = "bank", type = int.class) int bank
     ) {
-        player.sendRichMessage("<red>This is the /laser give command with amount %s".formatted(amount));
-        player.sendRichMessage("<red>String %s".formatted(item));
+        if (amount > 0) {
+            player.sendRichMessage("<red>Amount: %s".formatted(amount));
+        }
 
-        //if (amount > 0) {
-        //    player.sendRichMessage("<red>Amount: %s".formatted(amount));
-        //}
-
-        //if (item > 0) {
-        //    player.sendRichMessage("<green>%s is greater than 0!".formatted(item));
-        //}
-
-        //if (bank > 0) {
-        //    player.sendRichMessage("<yellow>%s is greater than 0!".formatted(bank));
-        //}
+        if (item > 0) {
+            player.sendRichMessage("<green>%s is greater than 0!".formatted(item));
+        }
     }
 
     @Leaf(value = "inventory", desc = "Opens a player's inventory.")
