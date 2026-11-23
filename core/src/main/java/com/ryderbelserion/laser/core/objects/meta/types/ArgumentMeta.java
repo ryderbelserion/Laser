@@ -11,17 +11,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.ryderbelserion.laser.core.CommandRegistry;
 import com.ryderbelserion.laser.core.ContextRegistry;
-import com.ryderbelserion.laser.core.api.annotations.other.Requirement;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.other.args.GreedyString;
 import com.ryderbelserion.laser.core.objects.arguments.ArgumentResolver;
 import com.ryderbelserion.laser.core.objects.keys.LaserKey;
-import com.ryderbelserion.laser.core.objects.requirements.RequirementResolver;
 import com.ryderbelserion.laser.core.objects.suggestions.SuggestionSource;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,10 +28,11 @@ import java.util.Locale;
 public class ArgumentMeta<CS, S extends Audience> {
 
     //private final List<RequirementResolver<CS>> requirements = new ArrayList<>();
+    private final List<String> defaultValues = new ArrayList<>();
     private @Nullable final ArgumentResolver<CS, ?> resolver;
     private final RequiredArgumentBuilder<CS, ?> argument;
-    private final ArgumentType<?> argumentType;
     private @Nullable final LaserKey suggestionKey;
+    private final ArgumentType<?> argumentType;
     private final String argumentName;
     private final boolean isGreedy;
     private final Class<?> type;
@@ -43,14 +43,22 @@ public class ArgumentMeta<CS, S extends Audience> {
 
             this.suggestionKey = LaserKey.of(this.argumentName = suggestion.name());
 
+            for (final String line : suggestion.values()) {
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                this.defaultValues.add(line);
+            }
+
             this.type = suggestion.type();
-        } else {
+        } else { // eventually, we'll manually parse. we just have to ignore certain arguments later on somehow, too lazy to do it right now.
             this.suggestionKey = null;
             this.argumentName = parameter.getName();
             this.type = parameter.getType();
         }
 
-        this.resolver = contextRegistry.get(this.type).orElse(null); //todo() combine this with the commandManager#mapArgumentType by returning a custom object.
+        this.resolver = contextRegistry.get(this.type).orElse(null);
 
         /*if (parameter.isAnnotationPresent(Requirement.class)) {
             final Requirement requirement = parameter.getAnnotation(Requirement.class);
@@ -101,7 +109,7 @@ public class ArgumentMeta<CS, S extends Audience> {
         }
 
         if (this.resolver == null) {
-            return List.of();
+            return this.defaultValues;
         }
 
         return this.resolver.suggest(source);

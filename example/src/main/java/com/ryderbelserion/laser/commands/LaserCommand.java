@@ -50,4 +50,15 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
     ) {
         player.openInventory(target.getInventory());
     }
+
+    @Leaf(value = "boolean", desc = "Tests a boolean argument.")
+    public void booleanTest(Player player, @Suggestion(name = "boolean", type = Boolean.class, values = {"true", "false"}) boolean isReady) {
+        if (isReady) {
+            player.sendRichMessage("<red>This is ready!");
+
+            return;
+        }
+
+        player.sendRichMessage("<red>This is not ready!");
+    }
 }

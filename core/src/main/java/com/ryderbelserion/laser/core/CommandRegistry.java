@@ -2,6 +2,7 @@ package com.ryderbelserion.laser.core;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
+import com.ryderbelserion.laser.core.api.AbstractLogger;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.objects.meta.types.ArgumentMeta;
 import com.ryderbelserion.laser.core.objects.keys.LaserKey;
@@ -27,6 +28,8 @@ public abstract class CommandRegistry<CS, S extends Audience> {
     public abstract ContextRegistry<CS> getSuggestionManager();
 
     public abstract SenderExtension<CS, S> getExtension();
+
+    public abstract AbstractLogger getLogger();
 
     public abstract void post(final String command);
 

@@ -11,6 +11,8 @@ public @interface Suggestion {
 
     Class<?> type();
 
+    String[] values() default "";
+
     String name();
 
 }
