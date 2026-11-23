@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.api;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.annotations.Flower;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -21,11 +22,13 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
     protected LiteralArgumentBuilder<CS> literal;
 
     protected final CommandMeta.@NonNull Builder builder;
+    protected final SuggestionManager suggestionManager;
     protected final SenderExtension<CS, S> extension;
     protected final AbstractLogger logger;
     protected final Object object;
 
-    public AbstractProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final AbstractLogger logger, final CommandMeta.@NonNull Builder builder) {
+    public AbstractProcessor(@NonNull final SuggestionManager suggestionManager, @NonNull final SenderExtension<CS, S> extension, @NonNull final Object object, @NonNull final AbstractLogger logger, final CommandMeta.@NonNull Builder builder) {
+        this.suggestionManager = suggestionManager;
         this.extension = extension;
         this.builder = builder;
         this.logger = logger;
@@ -40,7 +43,7 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
                     return !Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers);
                 })
-                .map(method -> new FlowerCommandProcessor<>(this.extension, this.object, this.logger, method))
+                .map(method -> new FlowerCommandProcessor<>(this.suggestionManager, this.extension, this.object, this.logger, method))
                 .toList().getFirst());
     }
 
@@ -52,7 +55,7 @@ public abstract class AbstractProcessor<CS, S extends Audience> {
 
                     return !Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers);
                 })
-                .map(method -> new LeafCommandProcessor<>(this.extension, this.object, this.logger, method))
+                .map(method -> new LeafCommandProcessor<>(this.suggestionManager, this.extension, this.object, this.logger, method))
                 .toList();
     }
 

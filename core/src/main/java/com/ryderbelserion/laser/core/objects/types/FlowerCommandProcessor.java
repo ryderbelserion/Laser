@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
@@ -16,12 +17,13 @@ import java.util.Optional;
 public class FlowerCommandProcessor<CS, S extends Audience> extends ArgumentProcessor<CS, S> {
 
     public FlowerCommandProcessor(
+            @NonNull final SuggestionManager suggestionManager,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object instance,
             @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
-        super(extension, instance, method, logger, new CommandMeta.@NonNull Builder());
+        super(suggestionManager, extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
         Optional.ofNullable(method.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
     }

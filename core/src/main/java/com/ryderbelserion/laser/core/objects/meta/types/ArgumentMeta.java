@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.other.args.GreedyString;
 import org.jspecify.annotations.NonNull;
@@ -19,7 +20,7 @@ public class ArgumentMeta<CS> {
     private final String argumentName;
     private final boolean isGreedy;
 
-    public ArgumentMeta(final Parameter parameter) {
+    public ArgumentMeta(final SuggestionManager suggestionManager, final Parameter parameter) {
         final Suggestion suggestion = parameter.getAnnotation(Suggestion.class);
 
         this.argumentType = mapArgument(suggestion.type());
@@ -30,6 +31,22 @@ public class ArgumentMeta<CS> {
         );
 
         this.isGreedy = parameter.isAnnotationPresent(GreedyString.class);
+
+        if (suggestionManager.hasSuggestion(this.argumentName)) {
+            this.argument.suggests((_, builder) -> {
+                suggestionManager.getSuggestions(this.argumentName).forEach(value -> {
+                    if (value instanceof Integer number) {
+                        builder.suggest(number);
+
+                        return;
+                    }
+
+                    builder.suggest(String.valueOf(value));
+                });
+
+                return builder.buildFuture();
+            });
+        }
     }
 
     public final void then(@NonNull final RequiredArgumentBuilder<CS, ?> argument) {

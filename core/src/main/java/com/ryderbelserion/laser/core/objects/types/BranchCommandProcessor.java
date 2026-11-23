@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.AbstractProcessor;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.types.Branch;
@@ -16,8 +17,8 @@ import java.util.Optional;
 
 public class BranchCommandProcessor<CS, S extends Audience> extends AbstractProcessor<CS, S> {
 
-    public BranchCommandProcessor(@NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractLogger logger, @NonNull final Object object) {
-        super(extension, object, logger, new CommandMeta.@NonNull Builder());
+    public BranchCommandProcessor(@NonNull final SuggestionManager suggestionManager, @NonNull final SenderExtension<CS, S> extension, @NonNull final AbstractLogger logger, @NonNull final Object object) {
+        super(suggestionManager, extension, object, logger, new CommandMeta.@NonNull Builder());
 
         final Class<?> klass = object.getClass();
 

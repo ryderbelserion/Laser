@@ -3,6 +3,7 @@ package com.ryderbelserion.laser.core.objects.meta.processors;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
@@ -25,6 +26,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
     protected final List<ArgumentMeta<CS>> arguments = new ArrayList<>();
     protected final CommandMeta.@NonNull Builder builder;
+    protected final SuggestionManager suggestionManager;
     protected final Parameter[] parameters;
     protected final AbstractLogger logger;
 
@@ -33,6 +35,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
     private final Method method;
 
     public ArgumentProcessor(
+            @NonNull final SuggestionManager suggestionManager,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object object,
             @NonNull final Method method,
@@ -40,6 +43,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
             final CommandMeta.@NonNull Builder builder
     ) {
+        this.suggestionManager = suggestionManager;
         this.parameters = method.getParameters();
         this.extension = extension;
         this.builder = builder;
@@ -52,7 +56,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
     public void init() {
         for (final Parameter parameter : process(this.parameters)) {
-            this.arguments.add(new ArgumentMeta<>(parameter));
+            this.arguments.add(new ArgumentMeta<>(this.suggestionManager, parameter));
         }
     }
 

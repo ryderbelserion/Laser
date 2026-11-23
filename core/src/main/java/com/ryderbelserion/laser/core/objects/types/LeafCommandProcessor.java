@@ -2,6 +2,7 @@ package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -21,12 +22,13 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
     private final LiteralArgumentBuilder<CS> literal;
 
     public LeafCommandProcessor(
+            @NonNull final SuggestionManager suggestionManager,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object instance,
             @NonNull final AbstractLogger logger,
             @NonNull final Method method
     ) {
-        super(extension, instance, method, logger, new CommandMeta.@NonNull Builder());
+        super(suggestionManager, extension, instance, method, logger, new CommandMeta.@NonNull Builder());
 
         final Leaf leaf = method.getAnnotation(Leaf.class);
 
@@ -51,7 +53,9 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
                 final ArgumentMeta<CS> meta = this.arguments.get(index);
 
                 if (child == null) {
-                    meta.getArgument().executes(this::execute);
+                    final RequiredArgumentBuilder<CS, ?> arg = meta.getArgument();
+
+                    arg.executes(this::execute);
                 } else {
                     meta.then(child);
                 }

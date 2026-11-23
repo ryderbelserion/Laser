@@ -1,6 +1,7 @@
 package com.ryderbelserion.laser.paper;
 
 import com.ryderbelserion.laser.core.CommandManager;
+import com.ryderbelserion.laser.core.SuggestionManager;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
@@ -19,11 +20,14 @@ import java.util.Arrays;
 
 public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
 
+    private final SuggestionManager suggestionManager;
     private final PaperLoggerExtension logger;
     private final JavaPlugin plugin;
 
     public PaperCommandManager(@NonNull final JavaPlugin plugin) {
         this.logger = new PaperLoggerExtension(this.plugin = plugin);
+
+        this.suggestionManager = new SuggestionManager();
 
         init();
     }
@@ -32,7 +36,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
     @Override
     public void registerTree(@NonNull final AbstractCommand<CommandSourceStack, CommandSender> command) {
-        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this.extension, this.logger, command);
+        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this.suggestionManager, this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSourceStack, CommandSender> tree = processor.getTreeProcessor();
 
@@ -45,6 +49,11 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
                 meta.get(MetaKey.description).orElse("N/A"),
                 Arrays.asList(meta.get(MetaKey.aliases).orElse(new String[0]))
         ));
+    }
+
+    @Override
+    public @NonNull SuggestionManager getSuggestionManager() {
+        return this.suggestionManager;
     }
 
     @Override
