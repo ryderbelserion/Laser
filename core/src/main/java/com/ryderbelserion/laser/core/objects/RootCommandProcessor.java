@@ -1,7 +1,7 @@
 package com.ryderbelserion.laser.core.objects;
 
-import com.ryderbelserion.laser.core.CommandManager;
-import com.ryderbelserion.laser.core.ResolverManager;
+import com.ryderbelserion.laser.core.CommandRegistry;
+import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.api.AbstractLogger;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
@@ -17,13 +17,13 @@ public final class RootCommandProcessor<CS, S extends Audience> {
     private final Object instance; // invocation instance.
 
     public RootCommandProcessor(
-            @NonNull final CommandManager<CS, S> commandManager,
-            @NonNull final ResolverManager<CS> resolverManager,
+            @NonNull final CommandRegistry<CS, S> commandRegistry,
+            @NonNull final ContextRegistry<CS> contextRegistry,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final AbstractLogger logger,
             @NonNull final AbstractCommand<CS, S> command
     ) {
-        this.processor = new TreeCommandProcessor<>(commandManager, resolverManager, extension, command, logger).build();
+        this.processor = new TreeCommandProcessor<>(commandRegistry, contextRegistry, extension, command, logger).build();
 
         this.instance = command;
         this.command = command;

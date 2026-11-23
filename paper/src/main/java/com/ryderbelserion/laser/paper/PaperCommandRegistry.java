@@ -6,14 +6,14 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.ryderbelserion.laser.core.CommandManager;
-import com.ryderbelserion.laser.core.ResolverManager;
+import com.ryderbelserion.laser.core.CommandRegistry;
+import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
 import com.ryderbelserion.laser.core.objects.meta.types.ArgumentMeta;
-import com.ryderbelserion.laser.core.objects.suggestions.SuggestionKey;
+import com.ryderbelserion.laser.core.objects.keys.LaserKey;
 import com.ryderbelserion.laser.core.objects.suggestions.interfaces.SuggestionSupplier;
 import com.ryderbelserion.laser.core.objects.types.TreeCommandProcessor;
 import com.ryderbelserion.laser.paper.extensions.PaperLoggerExtension;
@@ -28,12 +28,12 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Arrays;
 
 @NullMarked
-public final class PaperCommandManager extends CommandManager<CommandSourceStack, CommandSender> {
+public final class PaperCommandRegistry extends CommandRegistry<CommandSourceStack, CommandSender> {
 
     private final PaperLoggerExtension logger;
     private final JavaPlugin plugin;
 
-    public PaperCommandManager(final JavaPlugin plugin) {
+    public PaperCommandRegistry(final JavaPlugin plugin) {
         this.logger = new PaperLoggerExtension(this.plugin = plugin);
 
         init();
@@ -43,7 +43,7 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
 
     @Override
     public void registerTree(final AbstractCommand<CommandSourceStack, CommandSender> command) {
-        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this, this.resolverManager, this.extension, this.logger, command);
+        final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this, this.contextRegistry, this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSourceStack, CommandSender> tree = processor.getTreeProcessor();
 
@@ -59,8 +59,8 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     }
 
     @Override
-    public void registerSuggestion(final SuggestionKey key, final SuggestionSupplier<CommandSourceStack> supplier) {
-        this.resolverManager.register(key, supplier);
+    public void registerSuggestion(final LaserKey key, final SuggestionSupplier<CommandSourceStack> supplier) {
+        this.contextRegistry.register(key, supplier);
     }
 
     @Override
@@ -85,8 +85,8 @@ public final class PaperCommandManager extends CommandManager<CommandSourceStack
     }
 
     @Override
-    public ResolverManager<CommandSourceStack> getSuggestionManager() {
-        return this.resolverManager;
+    public ContextRegistry<CommandSourceStack> getSuggestionManager() {
+        return this.contextRegistry;
     }
 
     @Override

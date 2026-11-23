@@ -1,9 +1,10 @@
 package com.ryderbelserion.laser.core.objects.meta;
 
 import com.ryderbelserion.laser.core.objects.meta.types.PermissionMeta;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
-public class MetaKey<T> {
+@NullMarked
+public final class MetaKey<T> {
 
     public static final MetaKey<PermissionMeta> permission = MetaKey.of(PermissionMeta.class, "command.permision");
     public static final MetaKey<String> description = MetaKey.of(String.class, "command.description");
@@ -15,22 +16,22 @@ public class MetaKey<T> {
     private final String key;
 
     private MetaKey(
-            @NonNull final Class<? super T> type,
-            @NonNull final String key
+            final Class<? super T> type,
+            final String key
     ) {
         this.type = type;
         this.key = key;
     }
 
-    public @NonNull final Class<? super T> getType() {
+    public Class<? super T> getType() {
         return this.type;
     }
 
-    public @NonNull final String getKey() {
+    public String getKey() {
         return this.key;
     }
 
-    public static <T> @NonNull MetaKey<T> of(@NonNull final Class<? super T> type, @NonNull final String key) {
+    public static <T> MetaKey<T> of(final Class<? super T> type, final String key) {
         return new MetaKey<>(type, key);
     }
 }

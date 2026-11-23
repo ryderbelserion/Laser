@@ -9,39 +9,66 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ryderbelserion.laser.core.CommandManager;
-import com.ryderbelserion.laser.core.ResolverManager;
+import com.ryderbelserion.laser.core.CommandRegistry;
+import com.ryderbelserion.laser.core.ContextRegistry;
+import com.ryderbelserion.laser.core.api.annotations.other.Requirement;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.other.args.GreedyString;
 import com.ryderbelserion.laser.core.objects.arguments.ArgumentResolver;
-import com.ryderbelserion.laser.core.objects.suggestions.SuggestionKey;
+import com.ryderbelserion.laser.core.objects.keys.LaserKey;
+import com.ryderbelserion.laser.core.objects.requirements.RequirementResolver;
 import com.ryderbelserion.laser.core.objects.suggestions.SuggestionSource;
 import net.kyori.adventure.audience.Audience;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Locale;
 
+@NullMarked
 public class ArgumentMeta<CS, S extends Audience> {
 
+    //private final List<RequirementResolver<CS>> requirements = new ArrayList<>();
+    private @Nullable final ArgumentResolver<CS, ?> resolver;
     private final RequiredArgumentBuilder<CS, ?> argument;
-    private final ArgumentResolver<CS, ?> resolver;
     private final ArgumentType<?> argumentType;
-    private final SuggestionKey suggestionKey;
+    private @Nullable final LaserKey suggestionKey;
     private final String argumentName;
     private final boolean isGreedy;
     private final Class<?> type;
 
-    public ArgumentMeta(final CommandManager<CS, S> commandManager, final ResolverManager<CS> resolvers, final Parameter parameter) {
-        final Suggestion suggestion = parameter.getAnnotation(Suggestion.class);
+    public ArgumentMeta(final CommandRegistry<CS, S> commandRegistry, final ContextRegistry<CS> contextRegistry, final Parameter parameter) {
+        if (parameter.isAnnotationPresent(Suggestion.class)) {
+            final Suggestion suggestion = parameter.getAnnotation(Suggestion.class);
 
-        this.suggestionKey = SuggestionKey.of(this.argumentName = suggestion.name());
+            this.suggestionKey = LaserKey.of(this.argumentName = suggestion.name());
 
-        this.type = suggestion.type();
+            this.type = suggestion.type();
+        } else {
+            this.suggestionKey = null;
+            this.argumentName = parameter.getName();
+            this.type = parameter.getType();
+        }
 
-        this.resolver = resolvers.get(this.type).orElse(null); //todo() combine this with the commandManager#mapArgumentType by returning a custom object.
+        this.resolver = contextRegistry.get(this.type).orElse(null); //todo() combine this with the commandManager#mapArgumentType by returning a custom object.
 
-        this.argument = RequiredArgumentBuilder.argument(this.argumentName, this.argumentType = this.resolver == null ? commandManager.mapArgumentType(this) : this.resolver.argumentType());
+        /*if (parameter.isAnnotationPresent(Requirement.class)) {
+            final Requirement requirement = parameter.getAnnotation(Requirement.class);
+
+            final String[] ids = requirement.values();
+
+            for (final String id : ids) {
+                final Optional<RequirementResolver<CS>> optional = contextRegistry.get(LaserKey.of(id));
+
+                if (optional.isEmpty()) {
+                    continue;
+                }
+
+                this.requirements.add(optional.get());
+            }
+        }*/
+
+        this.argument = RequiredArgumentBuilder.argument(this.argumentName, this.argumentType = this.resolver == null ? commandRegistry.mapArgumentType(this) : this.resolver.argumentType());
 
         this.isGreedy = parameter.isAnnotationPresent(GreedyString.class);
 
@@ -50,7 +77,7 @@ public class ArgumentMeta<CS, S extends Audience> {
             final SuggestionSource<CS> source = new SuggestionSource<>(context.getSource(), values);
             final String lowercase = values.toLowerCase(Locale.ROOT);
 
-            for (final Object value : values(resolvers, source)) {
+            for (final Object value : values(contextRegistry, source)) {
                 if (value instanceof Integer number) {
                     builder.suggest(number);
 
@@ -68,7 +95,7 @@ public class ArgumentMeta<CS, S extends Audience> {
         });
     }
 
-    private List<?> values(@NonNull final ResolverManager<CS> manager, @NonNull final SuggestionSource<CS> source) {
+    private List<?> values(final ContextRegistry<CS> manager, final SuggestionSource<CS> source) {
         if (this.suggestionKey != null && manager.has(this.suggestionKey)) {
             return manager.resolve(this.suggestionKey, source);
         }
@@ -80,7 +107,7 @@ public class ArgumentMeta<CS, S extends Audience> {
         return this.resolver.suggest(source);
     }
 
-    public Object extract(@NonNull final CommandContext<CS> context) throws CommandSyntaxException {
+    public final Object extract(final CommandContext<CS> context) throws CommandSyntaxException {
         if (this.resolver == null) {
             return context.getArgument(this.argumentName, mapPrimitive(this.argumentType));
         }
@@ -88,23 +115,23 @@ public class ArgumentMeta<CS, S extends Audience> {
         return this.resolver.resolve(this.argumentName, context);
     }
 
-    public final void then(@NonNull final RequiredArgumentBuilder<CS, ?> argument) {
+    public final void then(final RequiredArgumentBuilder<CS, ?> argument) {
         this.argument.then(argument);
     }
 
-    public @NonNull final RequiredArgumentBuilder<CS, ?> getArgument() {
+    public final RequiredArgumentBuilder<CS, ?> getArgument() {
         return this.argument;
     }
 
-    public @NonNull final ArgumentType<?> getArgumentType() {
+    public final ArgumentType<?> getArgumentType() {
         return this.argumentType;
     }
 
-    public @NonNull final String getArgumentName() {
+    public final String getArgumentName() {
         return this.argumentName;
     }
 
-    public @NonNull final Class<?> getParsedType() {
+    public final Class<?> getParsedType() {
         return this.type;
     }
 
@@ -112,7 +139,7 @@ public class ArgumentMeta<CS, S extends Audience> {
         return this.isGreedy;
     }
 
-    public @NonNull Class<?> mapPrimitive(@NonNull final ArgumentType<?> argumentType) {
+    public final Class<?> mapPrimitive(final ArgumentType<?> argumentType) {
         final Class<?> klass = argumentType.getClass();
 
         Class<?> index = void.class;
@@ -125,7 +152,7 @@ public class ArgumentMeta<CS, S extends Audience> {
             index = boolean.class;
         } else if (klass == LongArgumentType.class) {
             index = long.class;
-        } else if (klass == StringArgumentType.class) {
+        } else if (klass == StringArgumentType.class || this.isGreedy) {
             index = String.class;
         }
 

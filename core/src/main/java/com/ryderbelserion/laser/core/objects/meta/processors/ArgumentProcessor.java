@@ -4,8 +4,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ryderbelserion.laser.core.CommandManager;
-import com.ryderbelserion.laser.core.ResolverManager;
+import com.ryderbelserion.laser.core.CommandRegistry;
+import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.extensions.SenderExtension;
 import com.ryderbelserion.laser.core.api.interfaces.CommandResult;
@@ -27,8 +27,8 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
     protected final List<ArgumentMeta<CS, S>> arguments = new ArrayList<>();
     protected final CommandMeta.@NonNull Builder builder;
-    protected final CommandManager<CS, S> commandManager;
-    protected final ResolverManager<CS> resolverManager;
+    protected final CommandRegistry<CS, S> commandRegistry;
+    protected final ContextRegistry<CS> contextRegistry;
     protected final Parameter[] parameters;
     protected final AbstractLogger logger;
 
@@ -37,8 +37,8 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
     private final Method method;
 
     public ArgumentProcessor(
-            @NonNull final CommandManager<CS, S> commandManager,
-            @NonNull final ResolverManager<CS> resolverManager,
+            @NonNull final CommandRegistry<CS, S> commandRegistry,
+            @NonNull final ContextRegistry<CS> contextRegistry,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final Object object,
             @NonNull final Method method,
@@ -46,8 +46,8 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
             final CommandMeta.@NonNull Builder builder
     ) {
-        this.resolverManager = resolverManager;
-        this.commandManager = commandManager;
+        this.contextRegistry = contextRegistry;
+        this.commandRegistry = commandRegistry;
         this.parameters = method.getParameters();
         this.extension = extension;
         this.builder = builder;
@@ -60,7 +60,7 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
 
     public void init() {
         for (final Parameter parameter : process(this.parameters)) {
-            this.arguments.add(new ArgumentMeta<>(this.commandManager, this.resolverManager, parameter));
+            this.arguments.add(new ArgumentMeta<>(this.commandRegistry, this.contextRegistry, parameter));
         }
     }
 
@@ -97,7 +97,6 @@ public abstract class ArgumentProcessor<CS, S extends Audience> {
             } catch (final CommandSyntaxException exception) {
                 throw new RuntimeException(exception);
             }
-            //arguments.add(context.getArgument(argument.getArgumentName(), argument.mapPrimitive(argument.getArgumentType())));
         });
 
         return invoke(arguments);

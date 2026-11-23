@@ -30,7 +30,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
 
     @Override
     public void init() {
-        this.registry.register(MessageKey.console_only, (sender, context) -> sender.sendRichMessage("<yellow>[Laser] <red>Only console players can execute this command!"));
+        this.registry.register(MessageKey.console_only, (sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only console players can execute this command!"));
         this.registry.register(MessageKey.player_only, (sender, _) -> sender.sendRichMessage("<yellow>[Laser] <red>Only players can execute this command!"));
     }
 
