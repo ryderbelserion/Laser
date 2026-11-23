@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._ea2c97e7233e4c5e4f435009e9a9eb78.java
 import java.time.Year
 
 plugins {
@@ -8,6 +9,13 @@ plugins {
 }
 
 val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+
+    withSourcesJar()
+    withJavadocJar()
+}
 
 tasks {
     javadoc {
@@ -61,7 +69,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(21)
+        options.release.set(25)
     }
 
     javadoc {
