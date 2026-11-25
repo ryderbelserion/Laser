@@ -2,6 +2,7 @@ package com.ryderbelserion.laser.core.objects.types;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.laser.core.CommandRegistry;
 import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.api.annotations.other.Permission;
@@ -37,6 +38,7 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
         this.literal = LiteralArgumentBuilder.literal(leaf.value());
 
         this.builder.add(MetaKey.description, leaf.desc());
+        this.builder.add(MetaKey.aliases, leaf.aliases());
         this.builder.add(MetaKey.literal, leaf.value());
 
         Optional.ofNullable(method.getAnnotation(Permission.class)).ifPresent(permission -> this.builder.add(MetaKey.permission, new PermissionMeta<>(extension, permission).init()));
@@ -47,6 +49,8 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
         this.builder.get(MetaKey.permission).ifPresent(permission -> this.literal.requires(context -> {
             return permission.isPermitted(context);
         }));
+
+        final LiteralCommandNode<CS> node;
 
         if (!this.arguments.isEmpty()) {
             RequiredArgumentBuilder<CS, ?> child = null;
@@ -63,12 +67,34 @@ public class LeafCommandProcessor<CS, S extends Audience> extends ArgumentProces
                 child = meta.getArgument();
             }
 
-            root.then(this.literal.then(child));
-
-            return;
+            node = this.literal.then(child).build();
+        } else {
+            node = this.literal.executes(this::execute).build();
         }
 
-        root.then(this.literal.executes(this::execute));
+        root.then(node);
+
+        final Optional<String[]> optional = this.builder.get(MetaKey.aliases);
+
+        if (optional.isPresent()) {
+            final String[] aliases = optional.get();
+
+            for (final String alias : aliases) {
+                if (alias.isBlank()) {
+                    continue;
+                }
+
+                final LiteralArgumentBuilder<CS> type = LiteralArgumentBuilder.literal(alias);
+
+                type.requires(this.literal.getRequirement()).redirect(node);
+
+                if (this.arguments.isEmpty()) {
+                    type.executes(this::execute);
+                }
+
+                root.then(type);
+            }
+        }
     }
 
     @Override

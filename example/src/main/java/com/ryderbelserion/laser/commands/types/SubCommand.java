@@ -16,13 +16,13 @@ public class SubCommand {
         sender.sendRichMessage("<yellow>This is the default sub command.");
     }
 
-    @Leaf(value = "help", desc = "The help command")
+    @Leaf(value = "help", desc = "The help command", aliases = "support")
     @Permission(permission = {"laser.help", "laser.test"})
     public void help(ConsoleCommandSender sender) {
         sender.sendRichMessage("<green>This is the help command.");
     }
 
-    @Leaf(value = "balance", desc = "The balance command")
+    @Leaf(value = "balance", desc = "The balance command", aliases = "vault")
     @Permission(permission = "laser.balance")
     public void balance(ConsoleCommandSender sender) {
         sender.sendRichMessage("<green>This is the balance command.");

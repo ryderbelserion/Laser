@@ -27,7 +27,7 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
         sender.sendRichMessage("<yellow>This is the /laser command!");
     }
 
-    @Leaf(value = "give", desc = "The give command")
+    @Leaf(value = "give", desc = "The give command", aliases = "deliver")
     @Permission(permission = {"laser.give", "laser.use"}, mode = PermissionMode.ANY_OF)
     public void give(
             Player player,
@@ -43,7 +43,7 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
         }
     }
 
-    @Leaf(value = "inventory", desc = "Opens a player's inventory.")
+    @Leaf(value = "inventory", desc = "Opens a player's inventory.", aliases = "inv")
     public void test(
             Player player,
             @Suggestion(name = "player", type = Player.class) Player target
@@ -51,7 +51,7 @@ public class LaserCommand extends AbstractCommand<CommandSourceStack, CommandSen
         player.openInventory(target.getInventory());
     }
 
-    @Leaf(value = "boolean", desc = "Tests a boolean argument.")
+    @Leaf(value = "boolean", desc = "Tests a boolean argument.", aliases = "not-boolean")
     public void booleanTest(Player player, @Suggestion(name = "boolean", type = Boolean.class, values = {"true", "false"}) boolean isReady) {
         if (isReady) {
             player.sendRichMessage("<red>This is ready!");
