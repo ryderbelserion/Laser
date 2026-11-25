@@ -18,3 +18,4 @@ No, the internals are not simple. It is very much a spiderweb but it's my spider
 - [X] Add the ability to customize internal messages using a registry.
 - [X] Add the ability to read the meta keys like PermissionMeta, or ArgumentMeta
 - [X] Allow registering dynamically updating suggestions.
+- [X] Alias support for sub commands.
