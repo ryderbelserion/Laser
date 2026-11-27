@@ -12,7 +12,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 
-@Tree(value = "laser", desc = "The base command for Laser!", aliases = {"le"})
+@Tree(value = "laserv", desc = "The base command for Laser!", aliases = {"le"})
 @Permission(permission = "laser.use")
 public class LaserCommand extends AbstractCommand<CommandSource, CommandSource> {
 
