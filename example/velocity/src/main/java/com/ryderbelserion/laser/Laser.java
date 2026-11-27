@@ -15,7 +15,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-@Plugin(id = "laser")
+@Plugin(id = "laser", version = "1.0.0", description = "An example plugin", authors = "ryderbelserion")
 public class Laser {
 
     private final ProxyServer server;
@@ -47,7 +47,8 @@ public class Laser {
             return List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         });
 
-        contextRegistry.register(LaserKey.of("item"), List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20));
+        contextRegistry.register(LaserKey.of("item"),
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20));
 
         List.of(
                 new LaserCommand()

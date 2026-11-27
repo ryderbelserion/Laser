@@ -51,7 +51,7 @@ public class VelocityCommandRegistry extends CommandRegistry<CommandSource, Comm
 
         commandManager.register(
                 commandManager.metaBuilder(meta.get(MetaKey.literal).orElse("")).plugin(this.plugin).aliases(meta.get(MetaKey.aliases).orElse(new String[0])).build(),
-                new BrigadierCommand(tree.literal().build())
+                new BrigadierCommand(tree.literal())
         );
     }
 

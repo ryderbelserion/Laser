@@ -1,10 +1,11 @@
 package com.ryderbelserion.laser.resolvers;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.ryderbelserion.laser.core.objects.arguments.ArgumentResolver;
 import com.ryderbelserion.laser.core.objects.suggestions.SuggestionSource;
+import com.ryderbelserion.laser.velocity.types.PlayerArgument;
+import com.ryderbelserion.laser.velocity.types.parser.PlayerArgumentParser;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -27,7 +28,7 @@ public class PlayerResolver implements ArgumentResolver<CommandSource, Player> {
 
     @Override
     public ArgumentType<?> argumentType() {
-        return StringArgumentType.string();
+        return new PlayerArgumentParser();
     }
 
     @Override
@@ -37,6 +38,6 @@ public class PlayerResolver implements ArgumentResolver<CommandSource, Player> {
 
     @Override
     public Player resolve(final String argumentName, final CommandContext<CommandSource> context) {
-        return context.getArgument(argumentName, Player.class);
+        return context.getArgument(argumentName, PlayerArgument.class).resolve(this.server);
     }
 }
