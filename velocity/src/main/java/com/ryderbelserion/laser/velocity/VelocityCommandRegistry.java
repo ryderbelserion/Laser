@@ -37,6 +37,8 @@ public class VelocityCommandRegistry extends CommandRegistry<CommandSource, Comm
         this.logger = new VelocityLoggerExtension(logger);
         this.extension = new VelocitySenderExtension(this.server = server);
         this.plugin = plugin;
+
+        init();
     }
 
     @Override
