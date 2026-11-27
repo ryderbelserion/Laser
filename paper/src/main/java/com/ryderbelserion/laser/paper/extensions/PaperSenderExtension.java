@@ -13,16 +13,17 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import java.util.Set;
 
+@NullMarked
 public final class PaperSenderExtension extends SenderExtension<CommandSourceStack, CommandSender> {
 
     private final Set<Class<?>> senders = Set.of(ConsoleCommandSender.class, CommandSender.class, Player.class);
 
     private final JavaPlugin plugin;
 
-    public PaperSenderExtension(@NonNull final JavaPlugin plugin) {
+    public PaperSenderExtension(final JavaPlugin plugin) {
         super(new MessageRegistry<>());
 
         this.plugin = plugin;
@@ -35,7 +36,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public @NonNull CommandResult validateSender(@NonNull final CommandSourceStack source, @NonNull final Class<?> type) {
+    public CommandResult validateSender(final CommandSourceStack source, final Class<?> type) {
         if (!this.senders.contains(type)) {
             throw new IllegalStateException("There is no valid sender supplied!");
         }
@@ -54,12 +55,12 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public boolean isPermitted(@NonNull final CommandSender sender, @NonNull final String permission) {
+    public boolean isPermitted(final CommandSender sender, final String permission) {
         return sender.hasPermission(permission);
     }
 
     @Override
-    public @NonNull CommandSender mapSender(@NonNull final CommandSourceStack source, @NonNull final Class<?> type) {
+    public CommandSender mapSender(final CommandSourceStack source, final Class<?> type) {
         if (!this.senders.contains(type)) {
             throw new IllegalStateException("There is no valid sender supplied!");
         }
@@ -78,7 +79,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public void registerPermission(@NonNull final String permission, @NonNull final PermissionMode mode) {
+    public void registerPermission(final String permission, final PermissionMode mode) {
         final PluginManager server = this.plugin.getServer().getPluginManager();
 
         final PermissionDefault permissionDefault = switch (mode) {
@@ -95,12 +96,12 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public @NonNull CommandSender mapAudience(@NonNull final CommandSourceStack source) {
+    public CommandSender mapAudience(final CommandSourceStack source) {
         return source.getSender();
     }
 
     @Override
-    public @NonNull Class<? extends CommandSourceStack> getSenderType(@NonNull final Class<?> klass) {
+    public Class<? extends CommandSourceStack> getSenderType(final Class<?> klass) {
         if (!this.getValidSenders().contains(klass)) {
             throw new IllegalStateException("%s is not a valid sender.".formatted(klass.getSimpleName()));
         }
@@ -109,7 +110,7 @@ public final class PaperSenderExtension extends SenderExtension<CommandSourceSta
     }
 
     @Override
-    public @NonNull Set<Class<?>> getValidSenders() {
+    public Set<Class<?>> getValidSenders() {
         return this.senders;
     }
 }

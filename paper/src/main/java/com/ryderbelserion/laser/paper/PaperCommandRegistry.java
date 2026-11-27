@@ -9,7 +9,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.ryderbelserion.laser.core.CommandRegistry;
 import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.api.AbstractCommand;
-import com.ryderbelserion.laser.core.api.AbstractLogger;
 import com.ryderbelserion.laser.core.objects.meta.MetaKey;
 import com.ryderbelserion.laser.core.objects.meta.interfaces.CommandMeta;
 import com.ryderbelserion.laser.core.objects.RootCommandProcessor;
@@ -107,7 +106,7 @@ public final class PaperCommandRegistry extends CommandRegistry<CommandSourceSta
     }
 
     @Override
-    public AbstractLogger getLogger() {
+    public PaperLoggerExtension getLogger() {
         return this.logger;
     }
 }

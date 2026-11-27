@@ -5,17 +5,19 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
-public class PaperLoggerExtension extends AbstractLogger {
+@NullMarked
+public final class PaperLoggerExtension extends AbstractLogger {
 
     private final ComponentLogger logger;
 
-    public PaperLoggerExtension(@NonNull final JavaPlugin plugin) {
+    public PaperLoggerExtension(final JavaPlugin plugin) {
         this.logger = plugin.getComponentLogger();
     }
 
     @Override
-    public void log(@NonNull final Level level, @NonNull final String message, @NonNull final Exception exception, @NonNull final Object... args) {
+    public void log(final Level level, final String message, final Exception exception, final Object... args) {
         final Component component = asComponent(message, args);
 
         switch (level) {
@@ -26,7 +28,7 @@ public class PaperLoggerExtension extends AbstractLogger {
     }
 
     @Override
-    public void log(@NonNull final Level level, @NonNull final String message, @NonNull final Object... args) {
+    public void log(final Level level, final String message, final Object... args) {
         final Component component = asComponent(message, args);
 
         switch (level) {

@@ -2,6 +2,7 @@
 paperweight = "2.0.0-beta.24" # https://github.com/PaperMC/paperweight
 adventure = "5.2.0" # https://github.com/KyoriPowered/adventure
 paper = "26.3.build.+" # https://github.com/PaperMC/Paper
+velocity = "3.5.0-SNAPSHOT" # https://github.com/PaperMC/Velocity
 
 ## Minecraft
 minecraft = "26.3" # https://minecraft.net
@@ -22,6 +23,9 @@ paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.
 
 # https://minecraft.net
 brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+
+# https://docs.papermc.io/velocity/dev/creating-your-first-plugin/
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
 
 # https://github.com/GradleUp/shadow
 shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
