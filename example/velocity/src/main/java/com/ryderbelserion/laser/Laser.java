@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 import com.ryderbelserion.laser.commands.LaserCommand;
 import com.ryderbelserion.laser.core.ContextRegistry;
 import com.ryderbelserion.laser.core.objects.keys.LaserKey;
-import com.ryderbelserion.laser.resolvers.PlayerResolver;
 import com.ryderbelserion.laser.velocity.VelocityCommandRegistry;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import java.util.ArrayList;
@@ -31,8 +31,6 @@ public class Laser {
 
         final ContextRegistry<CommandSource> contextRegistry = commandManager.getSuggestionManager();
 
-        contextRegistry.register(new PlayerResolver(this.server));
-
         commandManager.registerSuggestion(LaserKey.of("amount"), context -> {
             if (context.sender().hasPermission("laser.admin")) {
                 final List<Integer> values = new ArrayList<>();
@@ -47,11 +45,13 @@ public class Laser {
             return List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         });
 
+        commandManager.registerSuggestion(LaserKey.of("players"), _ -> this.server.getAllPlayers().stream().map(Player::getUsername).toList());
+
         contextRegistry.register(LaserKey.of("item"),
                 List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20));
 
         List.of(
-                new LaserCommand()
+                new LaserCommand(this.server)
         ).forEach(commandManager::registerTree);
     }
 }

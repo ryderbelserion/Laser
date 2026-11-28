@@ -11,12 +11,17 @@ import com.ryderbelserion.laser.core.enums.PermissionMode;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
 
 @Tree(value = "laserv", desc = "The base command for Laser!", aliases = {"le"})
 @Permission(permission = "laser.use")
 public class LaserCommand extends AbstractCommand<CommandSource, CommandSource> {
 
-    public LaserCommand() {
+    private final ProxyServer server;
+
+    public LaserCommand(final ProxyServer server) {
+        this.server = server;
+
         addBranch(new SubCommand());
     }
 
@@ -45,9 +50,13 @@ public class LaserCommand extends AbstractCommand<CommandSource, CommandSource> 
     @Leaf(value = "msg", desc = "Sends a message to a player.", aliases = "message")
     public void test(
             Player player,
-            @Suggestion(name = "player", type = Player.class) Player target
+            @Suggestion(name = "players", type = String.class) String target
     ) {
-        target.sendRichMessage("<red>You got mail! %s is trying to reach you about your car's extended warranty".formatted(player.getUsername()));
+        this.server.getPlayer(target).ifPresentOrElse(index -> {
+            index.sendRichMessage("<red>You got mail! %s is trying to reach you about your car's extended warranty".formatted(player.getUsername()));
+        }, () -> {
+            player.sendRichMessage("<red>%s not found.".formatted(target));
+        });
     }
 
     @Leaf(value = "boolean", desc = "Tests a boolean argument.", aliases = "not-boolean")
