@@ -13,7 +13,7 @@ public final class RootCommandProcessor<CS, S extends Audience> {
 
     private final TreeCommandProcessor<CS, S> processor; // process the /laser command.
 
-    private final AbstractCommand<CS, S> command; // contains information like branch commands.
+    private final AbstractCommand command; // contains information like branch commands.
     private final Object instance; // invocation instance.
 
     public RootCommandProcessor(
@@ -21,7 +21,7 @@ public final class RootCommandProcessor<CS, S extends Audience> {
             @NonNull final ContextRegistry<CS> contextRegistry,
             @NonNull final SenderExtension<CS, S> extension,
             @NonNull final AbstractLogger logger,
-            @NonNull final AbstractCommand<CS, S> command
+            @NonNull final AbstractCommand command
     ) {
         this.processor = new TreeCommandProcessor<>(commandRegistry, contextRegistry, extension, command, logger).build();
 
@@ -33,7 +33,7 @@ public final class RootCommandProcessor<CS, S extends Audience> {
         return this.processor;
     }
 
-    public @NonNull AbstractCommand<CS, S> getCommand() {
+    public @NonNull AbstractCommand getCommand() {
         return this.command;
     }
 

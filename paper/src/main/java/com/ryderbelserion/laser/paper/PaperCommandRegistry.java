@@ -42,7 +42,7 @@ public final class PaperCommandRegistry extends CommandRegistry<CommandSourceSta
     private PaperSenderExtension extension;
 
     @Override
-    public void registerTree(final AbstractCommand<CommandSourceStack, CommandSender> command) {
+    public void registerTree(final AbstractCommand command) {
         final RootCommandProcessor<CommandSourceStack, CommandSender> processor = new RootCommandProcessor<>(this, this.contextRegistry, this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSourceStack, CommandSender> tree = processor.getTreeProcessor();

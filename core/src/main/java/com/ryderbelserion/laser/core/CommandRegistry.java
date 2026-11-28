@@ -19,7 +19,7 @@ public abstract class CommandRegistry<CS, S extends Audience> {
         this.contextRegistry = new ContextRegistry<>();
     }
 
-    public abstract void registerTree(final AbstractCommand<CS, S> command);
+    public abstract void registerTree(final AbstractCommand command);
 
     public abstract void registerSuggestion(final LaserKey key, final SuggestionSupplier<CS> supplier);
 

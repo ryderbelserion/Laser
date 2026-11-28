@@ -8,14 +8,13 @@ import com.ryderbelserion.laser.core.api.annotations.other.Permission;
 import com.ryderbelserion.laser.core.api.annotations.other.Suggestion;
 import com.ryderbelserion.laser.core.api.annotations.types.Leaf;
 import com.ryderbelserion.laser.core.enums.PermissionMode;
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 @Tree(value = "laserv", desc = "The base command for Laser!", aliases = {"le"})
 @Permission(permission = "laser.use")
-public class LaserCommand extends AbstractCommand<CommandSource, CommandSource> {
+public class LaserCommand extends AbstractCommand {
 
     private final ProxyServer server;
 

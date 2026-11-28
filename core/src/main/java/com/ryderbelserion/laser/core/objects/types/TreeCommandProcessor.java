@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProcessor<CS, S> {
 
-    private final AbstractCommand<CS, S> command;
+    private final AbstractCommand command;
 
     /**
      * Builds the initial start of the literal chain, which is usually /laser
@@ -31,7 +31,7 @@ public class TreeCommandProcessor<CS, S extends Audience> extends AbstractProces
             @NonNull final CommandRegistry<CS, S> commandRegistry,
                                 @NonNull final ContextRegistry<CS> contextRegistry,
                                 @NonNull final SenderExtension<CS, S> extension,
-                                @NonNull final AbstractCommand<CS, S> command,
+                                @NonNull final AbstractCommand command,
                                 @NonNull final AbstractLogger logger
     ) {
         super(commandRegistry, contextRegistry, extension, command, logger, new CommandMeta.@NonNull Builder());

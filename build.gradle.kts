@@ -3,4 +3,4 @@ plugins {
 }
 
 rootProject.group = "com.ryderbelserion.laser"
-rootProject.version = "1.3.0"
+rootProject.version = "1.4.0"

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractCommand<CS, S> {
+public abstract class AbstractCommand {
 
     private final List<Object> branches = new ArrayList<>();
 

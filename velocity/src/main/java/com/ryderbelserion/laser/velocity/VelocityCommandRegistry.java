@@ -42,7 +42,7 @@ public class VelocityCommandRegistry extends CommandRegistry<CommandSource, Comm
     }
 
     @Override
-    public void registerTree(final AbstractCommand<CommandSource, CommandSource> command) {
+    public void registerTree(final AbstractCommand command) {
         final RootCommandProcessor<CommandSource, CommandSource> processor = new RootCommandProcessor<>(this, this.contextRegistry, this.extension, this.logger, command);
 
         final TreeCommandProcessor<CommandSource, CommandSource> tree = processor.getTreeProcessor();
