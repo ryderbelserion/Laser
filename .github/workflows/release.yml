@@ -25,6 +25,7 @@ jobs:
         run: |
           gradle :laser-core:publish
           gradle :laser-paper:publish
+          gradle :laser-velocity:publish
 
         env:
           GRADLE_USERNAME: ${{ secrets.GRADLE_USERNAME }}
